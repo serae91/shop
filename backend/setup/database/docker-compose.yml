@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: shop_db
+    environment:
+      POSTGRES_USER: shop_user
+      POSTGRES_PASSWORD: sAfe_Pass5ord
+      POSTGRES_DB: shop_db
+    ports:
+      - "5430:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
