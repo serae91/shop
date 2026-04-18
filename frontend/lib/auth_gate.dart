@@ -15,9 +15,18 @@ class _AuthGateState extends State<AuthGate> {
   final auth = AuthService();
   bool loading = true;
 
+  late VoidCallback listener;
+
   @override
   void initState() {
     super.initState();
+
+    listener = () {
+      setState(() {});
+    };
+
+    auth.addListener(listener);
+
     init();
   }
 
@@ -37,6 +46,14 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return auth.isLoggedIn ? const HomePage() : const LoginPage();
+    return auth.isLoggedIn
+        ? const HomePage()
+        : const LoginPage();
+  }
+
+  @override
+  void dispose() {
+    auth.removeListener(listener);
+    super.dispose();
   }
 }
