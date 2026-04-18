@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:provider/provider.dart';
 import './services/api_services.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,13 +12,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final api = ApiService();
-  final auth = AuthService();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
 
 
   void login() async {
+    final auth = context.read<AuthService>();
     final result = await api.login(
       emailController.text,
       passwordController.text,

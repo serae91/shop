@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'services/auth_service.dart';
 import 'login_page.dart';
@@ -40,6 +41,8 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthService>();
+
     if (loading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),

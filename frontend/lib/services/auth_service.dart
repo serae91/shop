@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import '../token_storage.dart';
 
 class AuthService extends ChangeNotifier {
-  static final AuthService _instance = AuthService._internal();
-  factory AuthService() => _instance;
-  AuthService._internal();
-
   String? token;
 
   Future<void> loadToken() async {
@@ -16,13 +12,13 @@ class AuthService extends ChangeNotifier {
   Future<void> login(String newToken) async {
     token = newToken;
     await TokenStorage.saveToken(newToken);
-    notifyListeners(); // 🔥 wichtig!
+    notifyListeners();
   }
 
   Future<void> logout() async {
     token = null;
     await TokenStorage.clear();
-    notifyListeners(); // 🔥 wichtig!
+    notifyListeners();
   }
 
   bool get isLoggedIn => token != null;
