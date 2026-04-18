@@ -55,10 +55,6 @@ class _ShopPageState extends State<ShopPage> {
 
           const SizedBox(width: 8),
 
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {},
-          ),
           // 🌍 Language
           DropdownButtonHideUnderline(
             child: DropdownButton<String>(

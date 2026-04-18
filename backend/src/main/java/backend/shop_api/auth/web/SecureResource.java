@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Context;
 public class SecureResource {
 
     @GET
-    @RolesAllowed("ShopUser")
+    @RolesAllowed("User")
     public String hello(@Context final SecurityIdentity identity) {
         return "Hallo " + identity.getPrincipal().getName();
     }

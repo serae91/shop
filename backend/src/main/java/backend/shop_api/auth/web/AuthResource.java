@@ -4,7 +4,7 @@ import backend.shop_api.auth.core.AuthService;
 import backend.shop_api.auth.model.LoginRequest;
 import backend.shop_api.auth.model.RegisterRequest;
 import backend.shop_api.auth.model.UserInfo;
-import backend.shop_entities.shop_user.ShopUser;
+import backend.shop_entities.user.User;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,7 +47,7 @@ public class AuthResource {
     public Response login(final LoginRequest request) {
         log.info("Login request for user: {}", request.email());
 
-        final ShopUser user = authService.authenticate(request.email(), request.password());
+        final User user = authService.authenticate(request.email(), request.password());
 
         if (user == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -94,7 +94,7 @@ public class AuthResource {
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(final RegisterRequest request) {
-        final ShopUser newUser = authService.createUser(request.username(), request.password());
+        final User newUser = authService.createUser(request.username(), request.password());
         return Response.status(Response.Status.CREATED).entity(newUser).build();
     }
 

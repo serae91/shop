@@ -1,7 +1,7 @@
 package backend.shop_api.auth.core;
 
 import backend.shop_api.user.core.UserRepository;
-import backend.shop_entities.shop_user.ShopUser;
+import backend.shop_entities.user.User;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -21,8 +21,8 @@ public class AuthService {
     @Inject
     UserRepository userRepository;
 
-    public ShopUser authenticate(final String email, final String password) {
-        final ShopUser user = userRepository.findByEmail(email);
+    public User authenticate(final String email, final String password) {
+        final User user = userRepository.findByEmail(email);
         log.info("athentitcate in service sent username " + email + "sent password" + password + "found by name password " + user.getPasswordHash());
 
         if (user == null) {
@@ -41,7 +41,7 @@ public class AuthService {
     }
 
     @Transactional
-    public ShopUser createUser(final String username, final String password) {
+    public User createUser(final String username, final String password) {
 
         if (username == null || username.isBlank()) {
             throw new WebApplicationException("Username required", 400);
@@ -58,7 +58,7 @@ public class AuthService {
             );
         }
 
-        final ShopUser user = ShopUser.builder()
+        final User user = User.builder()
                 .username(username)
                 .passwordHash(BcryptUtil.bcryptHash(password))
                 .build();

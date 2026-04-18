@@ -1,6 +1,6 @@
 package backend.shop_api.user.core;
 
-import backend.shop_entities.shop_user.ShopUser;
+import backend.shop_entities.user.User;
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.view.EntityViewManager;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ public class UserService {
     @Inject
     CriteriaBuilderFactory criteriaBuilderFactory;
 
-    public ShopUser getUserById(final Long userId) {
+    public User getUserById(final Long userId) {
         return userRepository.findById(userId);
     }
 

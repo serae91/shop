@@ -1,4 +1,4 @@
-package backend.shop_entities.shop_user;
+package backend.shop_entities.user;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.persistence.Column;
@@ -16,30 +16,30 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 
 @Entity
-@Table(name = "shop_user")
+@Table(name = "users")
 @RegisterForReflection
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ShopUser {
+public class User {
 
     @Id
-    @GeneratedValue(generator = "shop_user_sequence", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "shop_user_sequence", sequenceName = "shop_user_sequence", allocationSize = 1)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(generator = "users_sequence", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "users_sequence", sequenceName = "users_sequence", allocationSize = 1)
+    @Column(nullable = false)
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @Column(nullable = false)
     private String username;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(nullable = false)
     private String passwordHash;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private Instant createdAt;
 
-    @Column(name = "email", nullable = false)
+    @Column(nullable = false)
     private String email;
 }
 
