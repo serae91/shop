@@ -16,4 +16,18 @@ class ApiService {
 
     return res.data;
   }
+
+
+  Future<Map<String, dynamic>> getMe(String token) async {
+    final res = await dio.get(
+      "/auth/me",
+      options: Options(
+        headers: {
+          "Authorization": "Bearer $token",
+        },
+      ),
+    );
+
+    return res.data;
+  }
 }

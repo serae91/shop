@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/api_services.dart';
 import 'package:provider/provider.dart';
 
 import 'services/auth_service.dart';
@@ -13,30 +14,37 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
-  final auth = AuthService();
   bool loading = true;
-
-  late VoidCallback listener;
 
   @override
   void initState() {
     super.initState();
-
-    listener = () {
-      setState(() {});
-    };
-
-    auth.addListener(listener);
-
-    init();
+    _init();
   }
 
-  void init() async {
+  Future<void> _init() async {
+    final auth = context.read<AuthService>();
+    final api = context.read<ApiService>();
+
     await auth.loadToken();
 
-    if (mounted) {
-      setState(() => loading = false);
+    try {
+      final token = auth.token;
+
+      if (token != null) {
+        await api.getMe(token);
+      } else {
+        await auth.logout();
+      }
+    } catch (_) {
+      await auth.logout();
     }
+
+    if (!mounted) return;
+
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -49,14 +57,6 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return auth.isLoggedIn
-        ? const HomePage()
-        : const LoginPage();
-  }
-
-  @override
-  void dispose() {
-    auth.removeListener(listener);
-    super.dispose();
+    return auth.isLoggedIn ? const HomePage() : const LoginPage();
   }
 }

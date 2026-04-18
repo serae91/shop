@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/api_services.dart';
 import 'package:provider/provider.dart';
-import 'login_page.dart';
-import 'home_page.dart';
+
+import 'services/auth_service.dart';
 import 'auth_gate.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => AuthService(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,13 +14,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        Provider<ApiService>(
+          create: (_) => ApiService(),
+        ),
+        ChangeNotifierProvider<AuthService>(
+          create: (_) => AuthService(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: const AuthGate(),
       ),
-      home: const AuthGate(),
     );
   }
 }
