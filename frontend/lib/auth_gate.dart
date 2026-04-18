@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'services/auth_service.dart';
 import 'login_page.dart';
-import 'home_page.dart';
+import 'shop_page.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -57,6 +57,6 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return auth.isLoggedIn ? const HomePage() : const LoginPage();
+    return auth.isLoggedIn ? const ShopPage() : const LoginPage();
   }
 }
