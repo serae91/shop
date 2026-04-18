@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './services/api_services.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,21 +14,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  /*void login() {
-    final email = emailController.text;
-    final password = passwordController.text;
-
-    print("Login: $email / $password");
-  }*/
 
 
   void login() async {
-    final result = await api.login(emailController.text, passwordController.text);
+    final result = await api.login(
+      emailController.text,
+      passwordController.text,
+    );
 
     if (result != null) {
       print("Login erfolgreich");
-    } else {
-      print("Fehler beim Login");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
+      );
     }
   }
 
