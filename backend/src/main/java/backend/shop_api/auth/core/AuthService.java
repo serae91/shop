@@ -1,6 +1,7 @@
-package backend.bl_api.auth.core;
+package backend.shop_api.auth.core;
 
-import backend.bl_api.user.core.UserRepository;
+import backend.shop_api.user.core.UserRepository;
+import backend.shop_entities.shop_user.ShopUser;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -20,9 +21,9 @@ public class AuthService {
     @Inject
     UserRepository userRepository;
 
-    public backend.bl_entities.bl_user.ShopUser authenticate(final String username, final String password) {
-        final backend.bl_entities.bl_user.ShopUser user = userRepository.findByUsername(username);
-        log.info("athentitcate in service sent username " + username + "sent password" + password + "found by name password " + user.getPasswordHash());
+    public ShopUser authenticate(final String email, final String password) {
+        final ShopUser user = userRepository.findByEmail(email);
+        log.info("athentitcate in service sent username " + email + "sent password" + password + "found by name password " + user.getPasswordHash());
 
         if (user == null) {
             log.info("athentitcate in service, user not found");
@@ -40,7 +41,7 @@ public class AuthService {
     }
 
     @Transactional
-    public backend.bl_entities.bl_user.ShopUser createUser(final String username, final String password) {
+    public ShopUser createUser(final String username, final String password) {
 
         if (username == null || username.isBlank()) {
             throw new WebApplicationException("Username required", 400);
@@ -57,7 +58,7 @@ public class AuthService {
             );
         }
 
-        final backend.bl_entities.bl_user.ShopUser user = backend.bl_entities.bl_user.ShopUser.builder()
+        final ShopUser user = ShopUser.builder()
                 .username(username)
                 .passwordHash(BcryptUtil.bcryptHash(password))
                 .build();

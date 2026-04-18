@@ -1,4 +1,4 @@
-package backend.bl_api.auth.core;
+package backend.shop_api.auth.core;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.WebApplicationException;

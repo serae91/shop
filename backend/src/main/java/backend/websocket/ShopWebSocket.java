@@ -1,7 +1,5 @@
-package backend.bl_api.websocket;
+package backend.websocket;
 
-import backend.websocket.ChatWebRegistry;
-import backend.websocket.CommandHandler;
 import backend.websocket.model.outgoing.OutgoingWebSocketMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,18 +17,15 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
-@WebSocket(path = "/blwebsocket")
+@WebSocket(path = "/websocket")
 @ApplicationScoped
-public class BLWebSocket {
+public class ShopWebSocket {
 
     @Inject
     ObjectMapper objectMapper;
 
     @Inject
     CommandHandler commandHandler;
-
-    @Inject
-    ChatWebRegistry chatWebRegistry;
 
     @ConfigProperty(name = "smallrye.jwt.sign.key")
     String jwtSecret;
@@ -53,7 +48,6 @@ public class BLWebSocket {
 
             final Long userId = Long.valueOf(jwt.getClaim("id").toString());
 
-            chatWebRegistry.register(userId, connection);
 
             log.info("WebSocket connected: User {} (ID: {})", jwt.getName(), userId);
         } catch (final Exception e) {
@@ -76,7 +70,6 @@ public class BLWebSocket {
     @OnClose
     public void onClose(final WebSocketConnection connection) {
         log.info("Client disconnected: {}", connection.id());
-        chatWebRegistry.unregister(connection);
     }
 
     private String extractToken(String header) {

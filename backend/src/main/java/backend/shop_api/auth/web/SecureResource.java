@@ -1,4 +1,4 @@
-package backend.bl_api.auth.web;
+package backend.shop_api.auth.web;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.annotation.security.RolesAllowed;

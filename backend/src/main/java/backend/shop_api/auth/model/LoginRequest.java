@@ -1,4 +1,4 @@
-package backend.bl_api.auth.model;
+package backend.shop_api.auth.model;
 
-public record LoginRequest(String username, String password) {
+public record LoginRequest(String email, String password) {
 }

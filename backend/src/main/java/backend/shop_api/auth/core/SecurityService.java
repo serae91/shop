@@ -1,4 +1,4 @@
-package backend.bl_api.auth.core;
+package backend.shop_api.auth.core;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,9 +1,10 @@
-package backend.bl_api.auth.web;
+package backend.shop_api.auth.web;
 
-import backend.bl_api.auth.core.AuthService;
-import backend.bl_api.auth.model.LoginRequest;
-import backend.bl_api.auth.model.RegisterRequest;
-import backend.bl_api.auth.model.UserInfo;
+import backend.shop_api.auth.core.AuthService;
+import backend.shop_api.auth.model.LoginRequest;
+import backend.shop_api.auth.model.RegisterRequest;
+import backend.shop_api.auth.model.UserInfo;
+import backend.shop_entities.shop_user.ShopUser;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,7 +37,6 @@ public class AuthResource {
     @ConfigProperty(name = "smallrye.jwt.sign.key")
     String jwtSecret;
 
-    // Erkennt automatisch, ob wir im dev, test oder prod Profil sind
     @ConfigProperty(name = "quarkus.profile")
     String profile;
 
@@ -45,9 +45,9 @@ public class AuthResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(final LoginRequest request) {
-        log.info("Login request for user: {}", request.username());
+        log.info("Login request for user: {}", request.email());
 
-        final backend.bl_entities.bl_user.ShopUser user = authService.authenticate(request.username(), request.password());
+        final ShopUser user = authService.authenticate(request.email(), request.password());
 
         if (user == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -94,7 +94,7 @@ public class AuthResource {
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(final RegisterRequest request) {
-        final backend.bl_entities.bl_user.ShopUser newUser = authService.createUser(request.username(), request.password());
+        final ShopUser newUser = authService.createUser(request.username(), request.password());
         return Response.status(Response.Status.CREATED).entity(newUser).build();
     }
 

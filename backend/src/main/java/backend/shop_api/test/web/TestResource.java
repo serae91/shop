@@ -1,4 +1,4 @@
-package backend.bl_api.test.web;
+package backend.shop_api.test.web;
 
 import io.agroal.api.AgroalDataSource;
 import jakarta.inject.Inject;
