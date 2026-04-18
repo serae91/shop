@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'services/auth_service.dart';
 import 'login_page.dart';
-import 'shop_page.dart';
+import 'pages/shop_page/shop_page.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
