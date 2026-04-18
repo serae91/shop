@@ -1,0 +1,16 @@
+@use '../../../../styles/colors' as colors;
+@use '../../../../styles/constants' as constants;
+
+.standard-frame {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: constants.$padding;
+  background-color: colors.$color-background-primary;
+  width: 100%;
+  height: 100%;
+  gap: 1rem;
+}

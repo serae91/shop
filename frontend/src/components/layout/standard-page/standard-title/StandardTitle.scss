@@ -1,0 +1,32 @@
+@use '../../../../styles/colors' as colors;
+@use '../../../../styles/constants' as constants;
+
+.standard-title {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+
+  .title {
+    height: constants.$height-title;
+    font-size: constants.$font-size-title;
+    font-weight: constants.$font-weight-title;
+    display: flex;
+    align-items: center;
+  }
+
+  .sub-title {
+    height: constants.$height-sub-title;
+    font-size: constants.$font-size-subtitle;
+    font-weight: constants.$font-weight-sub-title;
+    display: flex;
+    align-items: center;
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 13.625rem;
+  }
+}

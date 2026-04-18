@@ -1,0 +1,18 @@
+@use '../../../../styles/colors' as colors;
+@use '../../../../styles/constants' as constants;
+
+.side-nav-bar-button-group {
+  gap: 0.25rem;
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    padding-left: 1.2em;
+    display: flex;
+    justify-content: left;
+    color: colors.$color-text-2;
+    font-weight: constants.$font-weight-title;
+    float: left;
+  }
+
+}

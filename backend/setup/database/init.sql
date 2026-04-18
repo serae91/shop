@@ -1,2 +1,2 @@
-CREATE USER shop_user;
-GRANT ALL ON DATABASE shop_db TO shop_user;
+CREATE USER shopper;
+GRANT ALL ON DATABASE shop-db TO shopper;

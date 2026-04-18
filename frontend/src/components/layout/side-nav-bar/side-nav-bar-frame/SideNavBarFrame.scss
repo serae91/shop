@@ -1,0 +1,11 @@
+@use '../../../../styles/colors' as colors;
+@use '../../../../styles/constants' as constants;
+
+.side-nav-bar-frame {
+  position: relative;
+  width: 20rem;
+  height: 100vh;
+  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}

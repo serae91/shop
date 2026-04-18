@@ -1,0 +1,21 @@
+@use '../../../../styles/colors' as colors;
+@use '../../../../styles/constants' as constants;
+
+.standard-content-card {
+  flex: 1;
+  justify-content: left;
+  padding: constants.$padding;
+  border-radius: constants.$border-radius;
+  border-style: solid;
+  border-width: constants.$border-width;
+  border-color: colors.$color-border;
+  background-color: colors.$color-white;
+  display: flex;
+  flex-direction: column;
+
+  color: colors.$color-text-main;
+  gap: 0.625rem;
+  position: relative;
+  width: calc(100% - 13.625rem);
+  height: 100%;
+}

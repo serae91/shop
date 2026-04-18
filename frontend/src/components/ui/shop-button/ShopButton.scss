@@ -1,0 +1,40 @@
+@use '../../../styles/colors' as colors;
+@use '../../../styles/constants' as constants;
+
+.shop-button {
+  position: relative;
+  display: flex;
+  padding: 0.5rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  border-radius: constants.$border-radius;
+  border-width: constants.$border-width;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: constants.$font-size-3;
+  font-weight: constants.$font-weight-title;
+
+}
+
+.primary {
+  background-color: colors.$color-brand;
+  color: colors.$color-white;
+}
+
+.primary:hover {
+  background-color: colors.$color-brand-plus
+}
+
+.secondary {
+  background-color: colors.$color-background-2;
+  color: colors.$color-text-main;
+}
+
+.secondary:hover {
+  background-color: colors.$color-select-gray;
+}

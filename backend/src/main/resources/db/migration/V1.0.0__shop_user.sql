@@ -7,13 +7,10 @@ CREATE SEQUENCE shop_user_sequence
 
 CREATE TABLE shop_user
 (
-    id               BIGINT                   PRIMARY KEY,
-    first_name       CHARACTER VARYING(100)   NOT NULL,
-    last_name        CHARACTER VARYING(100)   NOT NULL,
-    email            CHARACTER VARYING(255)   NOT NULL UNIQUE,
-    billing_address  TEXT                     NOT NULL,
-    shipping_address TEXT                     NOT NULL,
-    password_hash    CHARACTER VARYING(255)   NOT NULL,
-    created_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+    id             BIGINT                   PRIMARY KEY,
+    username       VARCHAR(255)             NOT NULL UNIQUE,
+    password_hash  VARCHAR(255)             NOT NULL ,
+    created_at     TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    email          VARCHAR(255)             NOT NULL UNIQUE,
+    CHECK (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
 );

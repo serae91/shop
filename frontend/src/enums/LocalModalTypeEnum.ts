@@ -1,0 +1,11 @@
+export enum GlobalModalTypeEnum {
+  NONE = 'NONE',
+}
+
+export enum LocalModalTypeEnum {
+  JOIN_CHAT = 'JOIN_CHAT',
+  CREATE_CHAT = 'CREATE_CHAT',
+  CREATE_GROUP = 'CREATE_GROUP',
+  ADD_GROUP_MEMBERS = 'ADD_GROUP_MEMBERS',
+  CONFIRMATION = 'CONFIRMATION',
+}

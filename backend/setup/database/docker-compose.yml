@@ -3,11 +3,11 @@ version: '3.9'
 services:
   postgres:
     image: postgres:15
-    container_name: shop_db
+    container_name: shop-db
     environment:
-      POSTGRES_USER: shop_user
+      POSTGRES_USER: shopper
       POSTGRES_PASSWORD: sAfe_Pass5ord
-      POSTGRES_DB: shop_db
+      POSTGRES_DB: shop-db
     ports:
       - "5430:5432"
     volumes:
