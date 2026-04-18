@@ -9,5 +9,5 @@ CREATE TABLE carts
 (
     id         BIGINT PRIMARY KEY,
     user_id    BIGINT UNIQUE REFERENCES users (id),
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP with time zone not null DEFAULT NOW()
 );

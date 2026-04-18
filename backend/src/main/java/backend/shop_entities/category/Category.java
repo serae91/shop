@@ -26,4 +26,7 @@ public class Category {
     @SequenceGenerator(name = "categories_sequence", sequenceName = "categories_sequence", allocationSize = 1)
     @Column(nullable = false)
     private Long id;
+
+    @Column(length = 100, nullable = false)
+    private String name;
 }

@@ -11,5 +11,5 @@ CREATE TABLE orders
     user_id     BIGINT REFERENCES users (id),
     status      VARCHAR(30) DEFAULT 'PENDING',
     total_price NUMERIC(10, 2),
-    created_at  TIMESTAMP   DEFAULT NOW()
+    created_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

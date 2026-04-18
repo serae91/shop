@@ -1,11 +1,11 @@
-CREATE SEQUENCE wishlist_items_sequence
+CREATE SEQUENCE wish_list_items_sequence
     INCREMENT 1
     START 1
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
 
-CREATE TABLE wishlist_items
+CREATE TABLE wish_list_items
 (
     id         BIGINT PRIMARY KEY,
     user_id    BIGINT REFERENCES users (id),
