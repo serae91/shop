@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/shop_page/shop_page_drawer/shop_page_drawer.dart';
+import 'package:frontend/services/product_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/product_view.dart';
 import '../../services/theme_service.dart';
 
 class ShopPage extends StatefulWidget {
@@ -15,22 +17,27 @@ class _ShopPageState extends State<ShopPage> {
   String selectedCategory = "All";
   String selectedLanguage = "DE";
 
+  late Future<List<ProductView>> _productsFuture;
+
+  final ProductService _productService = ProductService();
+
   final categories = ["All", "Shoes", "Clothes", "Accessories"];
 
-  final products = const [
-    {"name": "Sneaker", "category": "Shoes", "price": 79.99},
-    {"name": "T-Shirt", "category": "Clothes", "price": 19.99},
-    {"name": "Hoodie", "category": "Clothes", "price": 49.99},
-    {"name": "Cap", "category": "Accessories", "price": 14.99},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  void _loadProducts() {
+    setState(() {
+      _productsFuture = _productService.getProducts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    final filtered = selectedCategory == "All"
-        ? products
-        : products.where((p) => p["category"] == selectedCategory).toList();
 
     return Scaffold(
       backgroundColor: colorScheme.background,
@@ -41,7 +48,6 @@ class _ShopPageState extends State<ShopPage> {
         foregroundColor: colorScheme.onSurface,
         title: const Text("Online Shop"),
         actions: [
-          // Theme
           IconButton(
             icon: Icon(
               Theme.of(context).brightness == Brightness.dark
@@ -55,7 +61,6 @@ class _ShopPageState extends State<ShopPage> {
 
           const SizedBox(width: 8),
 
-          // 🌍 Language
           DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedLanguage,
@@ -63,17 +68,11 @@ class _ShopPageState extends State<ShopPage> {
               items: [
                 DropdownMenuItem(
                   value: "DE",
-                  child: Text(
-                    "DE",
-                    style: TextStyle(color: colorScheme.onSurface),
-                  ),
+                  child: Text("DE", style: TextStyle(color: colorScheme.onSurface)),
                 ),
                 DropdownMenuItem(
                   value: "EN",
-                  child: Text(
-                    "EN",
-                    style: TextStyle(color: colorScheme.onSurface),
-                  ),
+                  child: Text("EN", style: TextStyle(color: colorScheme.onSurface)),
                 ),
               ],
               onChanged: (value) {
@@ -86,25 +85,9 @@ class _ShopPageState extends State<ShopPage> {
 
           const SizedBox(width: 8),
 
-          // 👤 Profile
           IconButton(
             icon: Icon(Icons.person, color: colorScheme.onSurface),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  backgroundColor: colorScheme.surface,
-                  title: Text(
-                    "Profil",
-                    style: TextStyle(color: colorScheme.onSurface),
-                  ),
-                  content: Text(
-                    "User Settings / Profile Page",
-                    style: TextStyle(color: colorScheme.onSurfaceVariant),
-                  ),
-                ),
-              );
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -122,67 +105,90 @@ class _ShopPageState extends State<ShopPage> {
       ),
 
       // 🛍️ BODY
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: GridView.builder(
-          itemCount: filtered.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.78,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-          ),
-          itemBuilder: (context, index) {
-            final product = filtered[index];
+      body: FutureBuilder<List<ProductView>>(
+        future: _productsFuture,
+        builder: (context, snapshot) {
 
-            return Card(
-              color: colorScheme.surface,
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.shopping_bag,
-                      size: 50,
-                      color: colorScheme.primary,
-                    ),
-                    const SizedBox(height: 10),
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-                    Text(
-                      product["name"].toString(),
-                      style: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+          if (snapshot.hasError) {
+            return const Center(child: Text("Fehler beim Laden der Produkte"));
+          }
 
-                    const SizedBox(height: 4),
+          final products = snapshot.data ?? [];
 
-                    Text(
-                      "€${product["price"]}",
-                      style: TextStyle(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+          final filtered = selectedCategory == "All"
+              ? products
+              : products
+              .where((p) => p.category == selectedCategory)
+              .toList();
 
-                    const SizedBox(height: 10),
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        foregroundColor: colorScheme.onPrimary,
-                      ),
-                      onPressed: () {},
-                      child: const Text("Add"),
-                    ),
-                  ],
-                ),
+          return Padding(
+            padding: const EdgeInsets.all(12),
+            child: GridView.builder(
+              itemCount: filtered.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.78,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
               ),
-            );
-          },
-        ),
+              itemBuilder: (context, index) {
+                final product = filtered[index];
+
+                return Card(
+                  color: colorScheme.surface,
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.shopping_bag,
+                          size: 50,
+                          color: colorScheme.primary,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Text(
+                          product.name,
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        Text(
+                          "€${product.price}",
+                          style: TextStyle(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            foregroundColor: colorScheme.onPrimary,
+                          ),
+                          onPressed: () {},
+                          child: const Text("Add"),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

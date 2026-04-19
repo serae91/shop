@@ -1,12 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/services/dio_client.dart';
 
 class ApiService {
-  final Dio dio = Dio(
-    BaseOptions(baseUrl: "http://localhost:8080"),
-  );
 
   Future<Map<String, dynamic>?> login(String email, String password) async {
-    final res = await dio.post(
+    final res = await DioClient.dio.post(
       "/auth/login",
       data: {
         "email": email,
@@ -17,15 +15,9 @@ class ApiService {
     return res.data;
   }
 
-
-  Future<Map<String, dynamic>> getMe(String token) async {
-    final res = await dio.get(
+  Future<Map<String, dynamic>> getMe() async {
+    final res = await DioClient.dio.get(
       "/auth/me",
-      options: Options(
-        headers: {
-          "Authorization": "Bearer $token",
-        },
-      ),
     );
 
     return res.data;

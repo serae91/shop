@@ -1,36 +1,26 @@
 package backend.security;
 
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.SecurityContext;
+import jakarta.inject.Inject;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @RequestScoped
 public class CurrentUser {
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    JsonWebToken jwt;
 
     public Long getUserId() {
-        java.security.Principal principal = securityContext.getUserPrincipal();
+        Object idClaim = jwt.getClaim("id");
 
-        if (!(principal instanceof JsonWebToken jwt)) {
-            System.err.println("CurrentUser: Principal is not a JWT! Path: " +
-                    (securityContext.getAuthenticationScheme()));
-            throw new WebApplicationException("Nicht authentifiziert", 401);
-        }
-
-        final Object idClaim = jwt.getClaim("id");
         if (idClaim == null) {
-            System.err.println("CurrentUser: ID Claim missing for user: " + jwt.getName());
-            throw new WebApplicationException("User ID fehlt im Token", 403);
+            throw new SecurityException("User ID fehlt im Token");
         }
 
         return Long.valueOf(idClaim.toString());
     }
 
     public String getUsername() {
-        return securityContext.getUserPrincipal().getName();
+        return jwt.getName();
     }
 }

@@ -29,10 +29,8 @@ class _AuthGateState extends State<AuthGate> {
     await auth.loadToken();
 
     try {
-      final token = auth.token;
-
-      if (token != null) {
-        await api.getMe(token);
+      if (auth.token != null) {
+        await api.getMe();
       } else {
         await auth.logout();
       }
