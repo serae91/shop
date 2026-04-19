@@ -17,7 +17,7 @@ public class ProductResource {
 
     @GET
     @Path("/products")
-    public List<ProductView> getList() {
+    public List<ProductView> getProducts() {
         return productService.getProducts();
     }
 }

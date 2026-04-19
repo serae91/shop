@@ -1,6 +1,5 @@
 package backend.persistence.view;
 
-import backend.persistence.entity.Category;
 import backend.persistence.entity.Product;
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
@@ -21,7 +20,7 @@ public interface ProductView {
 
     Integer getStock();
 
-    Category getCategory();
+    CategoryView getCategory();
 
     Instant getCreatedAt();
 
