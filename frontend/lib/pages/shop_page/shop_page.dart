@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/product_view.dart';
 import 'package:frontend/pages/shop_page/shop_page_drawer/shop_page_drawer.dart';
 import 'package:frontend/services/product_service.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/product_view.dart';
 import '../../services/theme_service.dart';
 
 class ShopPage extends StatefulWidget {
@@ -17,11 +17,10 @@ class _ShopPageState extends State<ShopPage> {
   String selectedCategory = "All";
   String selectedLanguage = "DE";
 
+  final ProductService _productService = ProductService();
   late Future<List<ProductView>> _productsFuture;
 
-  final ProductService _productService = ProductService();
-
-  final categories = ["All", "Shoes", "Clothes", "Accessories"];
+  final categories = ["All", "Shoes", "Clothes", "Accessories", "Furniture", "Toys"];
 
   @override
   void initState() {
@@ -30,8 +29,12 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void _loadProducts() {
+    _productsFuture = _productService.getProducts();
+  }
+
+  void _reload() {
     setState(() {
-      _productsFuture = _productService.getProducts();
+      _loadProducts();
     });
   }
 
@@ -42,12 +45,13 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       backgroundColor: colorScheme.background,
 
-      // 🧠 AppBar
+      // 🧠 APP BAR
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         title: const Text("Online Shop"),
         actions: [
+          // 🌙 Theme toggle
           IconButton(
             icon: Icon(
               Theme.of(context).brightness == Brightness.dark
@@ -61,6 +65,7 @@ class _ShopPageState extends State<ShopPage> {
 
           const SizedBox(width: 8),
 
+          // 🌍 Language
           DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedLanguage,
@@ -86,13 +91,20 @@ class _ShopPageState extends State<ShopPage> {
           const SizedBox(width: 8),
 
           IconButton(
+            icon: Icon(Icons.refresh, color: colorScheme.onSurface),
+            onPressed: _reload,
+          ),
+
+          const SizedBox(width: 8),
+
+          IconButton(
             icon: Icon(Icons.person, color: colorScheme.onSurface),
             onPressed: () {},
           ),
         ],
       ),
 
-      // 📂 Drawer
+      // 📂 DRAWER
       drawer: ShopPageDrawer(
         categories: categories,
         selectedCategory: selectedCategory,
@@ -114,7 +126,12 @@ class _ShopPageState extends State<ShopPage> {
           }
 
           if (snapshot.hasError) {
-            return const Center(child: Text("Fehler beim Laden der Produkte"));
+            return Center(
+              child: Text(
+                "Fehler beim Laden der Produkte",
+                style: TextStyle(color: colorScheme.error),
+              ),
+            );
           }
 
           final products = snapshot.data ?? [];
@@ -122,16 +139,20 @@ class _ShopPageState extends State<ShopPage> {
           final filtered = selectedCategory == "All"
               ? products
               : products
-              .where((p) => p.category == selectedCategory)
+              .where((p) => p.category.name == selectedCategory)
               .toList();
+
+          if (filtered.isEmpty) {
+            return const Center(child: Text("Keine Produkte gefunden"));
+          }
 
           return Padding(
             padding: const EdgeInsets.all(12),
             child: GridView.builder(
               itemCount: filtered.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.78,
+                crossAxisCount: 3,
+                childAspectRatio: 0.75,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
@@ -141,48 +162,80 @@ class _ShopPageState extends State<ShopPage> {
                 return Card(
                   color: colorScheme.surface,
                   elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_bag,
-                          size: 50,
-                          color: colorScheme.primary,
-                        ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
 
-                        const SizedBox(height: 10),
-
-                        Text(
-                          product.name,
-                          style: TextStyle(
-                            color: colorScheme.onSurface,
-                            fontWeight: FontWeight.bold,
+                      // 🖼️ IMAGE
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          child: Image.network(
+                            product.productImage.url,
+                            fit: BoxFit.cover,
                           ),
                         ),
+                      ),
 
-                        const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
 
-                        Text(
-                          "€${product.price}",
-                          style: TextStyle(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
+                            // NAME
+                            Text(
+                              product.name,
+                              style: TextStyle(
+                                color: colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+
+                            const SizedBox(height: 4),
+
+                            // CATEGORY
+                            Text(
+                              product.category.name,
+                              style: TextStyle(
+                                color: colorScheme.onSurfaceVariant,
+                                fontSize: 12,
+                              ),
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            // PRICE
+                            Text(
+                              "€${product.price.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                color: colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            // BUTTON
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorScheme.primary,
+                                  foregroundColor: colorScheme.onPrimary,
+                                ),
+                                onPressed: () {
+                                  // TODO: Add to cart
+                                },
+                                child: const Text("Add to Cart"),
+                              ),
+                            ),
+                          ],
                         ),
-
-                        const SizedBox(height: 10),
-
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: colorScheme.primary,
-                            foregroundColor: colorScheme.onPrimary,
-                          ),
-                          onPressed: () {},
-                          child: const Text("Add"),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               },
