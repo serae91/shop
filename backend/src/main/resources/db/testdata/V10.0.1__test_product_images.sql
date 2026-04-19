@@ -1,4 +1,4 @@
-INSERT INTO wish_list_items
+INSERT INTO product_images
 VALUES (nextval('product_images_sequence'), 1, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_060.png'),
        (nextval('product_images_sequence'), 2, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_061.png'),
        (nextval('product_images_sequence'), 3, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_062.png'),
@@ -8,7 +8,4 @@ VALUES (nextval('product_images_sequence'), 1, 'https://www.pokewiki.de/images/f
        (nextval('product_images_sequence'), 7, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_066.png'),
        (nextval('product_images_sequence'), 8, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_067.png'),
        (nextval('product_images_sequence'), 9, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_068.png'),
-       (nextval('product_images_sequence'), 10, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_069.png'),
-       (nextval('product_images_sequence'), 11, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_070.png'),
-       (nextval('product_images_sequence'), 12, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_071.png'),
-       (nextval('product_images_sequence'), 13, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_072.png'),
+       (nextval('product_images_sequence'), 10, 'https://www.pokewiki.de/images/f/f7/Hauptartwork_069.png');
