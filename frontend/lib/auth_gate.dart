@@ -39,9 +39,7 @@ class _AuthGateState extends State<AuthGate> {
 
     if (!mounted) return;
 
-    setState(() {
-      loading = false;
-    });
+    setState(() => loading = false);
   }
 
   @override
@@ -54,8 +52,10 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return auth.isLoggedIn
-        ? const ShopPage()
-        : const LoginPage();
+    if (auth.isLoggedIn) {
+      return const ShopPage();
+    }
+
+    return const LoginPage();
   }
 }

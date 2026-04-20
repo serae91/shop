@@ -28,6 +28,12 @@ class _LoginPageState extends State<LoginPage> {
 
     if (result != null) {
       await auth.setToken(result["token"]);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Login erfolgreich")),
+      );
     }
   }
 

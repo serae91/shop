@@ -7,7 +7,14 @@ import 'package:provider/provider.dart';
 
 import 'auth_gate.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final auth = AuthService();
+
+  await auth.loadToken();
+  DioClient.init(auth);
+
   runApp(const MyApp());
 }
 
@@ -20,7 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeService()),
         ChangeNotifierProvider(create: (_) => AuthService()),
-        Provider<ApiService>(create: (_) => ApiService()), // ✅ DAS FEHLT
+        Provider<ApiService>(create: (context) => ApiService(),),
       ],
       child: const AppRoot(),
     );
