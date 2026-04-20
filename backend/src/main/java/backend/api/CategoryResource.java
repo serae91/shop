@@ -16,7 +16,7 @@ public class CategoryResource {
     CategoryService categoryService;
 
     @GET
-    @Path("/products")
+    @Path("/categories")
     public List<CategoryView> getCategories() {
         return categoryService.getCategories();
     }

@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/category_view.dart';
 
 class ShopPageDrawer extends StatelessWidget {
-  final List<String> categories;
-  final String selectedCategory;
-  final Function(String) onSelect;
+  final List<CategoryView> categories;
+  final int selectedCategoryId;
+  final Function(int) onSelect;
 
   const ShopPageDrawer({
     super.key,
     required this.categories,
-    required this.selectedCategory,
+    required this.selectedCategoryId,
     required this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
+    final List<CategoryView> extendedCategories = [
+      CategoryView(id: 0, name: "All"),
+      ...categories,
+    ];
     final colorScheme = Theme.of(context).colorScheme;
 
     return Drawer(
@@ -41,8 +46,8 @@ class ShopPageDrawer extends StatelessWidget {
               // 📂 Kategorien
               Expanded(
                 child: ListView(
-                  children: categories.map((cat) {
-                    final isSelected = cat == selectedCategory;
+                  children: extendedCategories.map((cat) {
+                    final isSelected = cat.id == selectedCategoryId;
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -65,7 +70,7 @@ class ShopPageDrawer extends StatelessWidget {
                                 : colorScheme.onSurfaceVariant,
                           ),
                           title: Text(
-                            cat,
+                            cat.name,
                             style: TextStyle(
                               color: isSelected
                                   ? colorScheme.primary
@@ -75,7 +80,7 @@ class ShopPageDrawer extends StatelessWidget {
                                   : FontWeight.normal,
                             ),
                           ),
-                          onTap: () => onSelect(cat),
+                          onTap: () => onSelect(cat.id),
                         ),
                       ),
                     );

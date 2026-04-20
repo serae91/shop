@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model/product_view.dart';
 import 'package:frontend/pages/shop_page/shop_page_drawer/shop_page_drawer.dart';
+import 'package:frontend/services/category_service.dart';
 import 'package:frontend/services/product_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/category_view.dart';
 import '../../services/theme_service.dart';
 
 class ShopPage extends StatefulWidget {
@@ -14,11 +16,13 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  String selectedCategory = "All";
+  int selectedCategoryId = 0;
   String selectedLanguage = "DE";
 
   final ProductService _productService = ProductService();
+  final CategoryService _categoryService = CategoryService();
   late Future<List<ProductView>> _productsFuture;
+  late Future<List<CategoryView>> _categoriesFuture;
 
   final categories = ["All", "Shoes", "Clothes", "Accessories", "Furniture", "Toys"];
 
@@ -26,10 +30,15 @@ class _ShopPageState extends State<ShopPage> {
   void initState() {
     super.initState();
     _loadProducts();
+    _loadCategoriess();
   }
 
   void _loadProducts() {
     _productsFuture = _productService.getProducts();
+  }
+
+  void _loadCategoriess() {
+    _categoriesFuture = _categoryService.getCategories();
   }
 
   void _reload() {
@@ -105,16 +114,31 @@ class _ShopPageState extends State<ShopPage> {
       ),
 
       // 📂 DRAWER
-      drawer: ShopPageDrawer(
-        categories: categories,
-        selectedCategory: selectedCategory,
-        onSelect: (cat) {
-          setState(() {
-            selectedCategory = cat;
-          });
-          Navigator.pop(context);
-        },
-      ),
+      drawer: FutureBuilder<List<CategoryView>>(
+    future: _categoriesFuture,
+      builder: (context, snapshot) {
+
+        if (!snapshot.hasData) {
+          return const Drawer(
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final categories = snapshot.data!;
+
+
+        return ShopPageDrawer(
+          categories: categories,
+          selectedCategoryId: selectedCategoryId,
+          onSelect: (cat) {
+            setState(() {
+              selectedCategoryId = cat;
+            });
+            Navigator.pop(context);
+          },
+        );
+      },
+    ),
 
       // 🛍️ BODY
       body: FutureBuilder<List<ProductView>>(
@@ -136,10 +160,10 @@ class _ShopPageState extends State<ShopPage> {
 
           final products = snapshot.data ?? [];
 
-          final filtered = selectedCategory == "All"
+          final filtered = selectedCategoryId == 0
               ? products
               : products
-              .where((p) => p.category.name == selectedCategory)
+              .where((p) => p.category.id == selectedCategoryId)
               .toList();
 
           if (filtered.isEmpty) {
