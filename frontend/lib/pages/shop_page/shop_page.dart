@@ -6,6 +6,7 @@ import 'package:frontend/services/product_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/category_view.dart';
+import '../../services/auth_service.dart';
 import '../../services/theme_service.dart';
 
 class ShopPage extends StatefulWidget {
@@ -21,240 +22,219 @@ class _ShopPageState extends State<ShopPage> {
 
   final ProductService _productService = ProductService();
   final CategoryService _categoryService = CategoryService();
+
   late Future<List<ProductView>> _productsFuture;
   late Future<List<CategoryView>> _categoriesFuture;
-
-  final categories = ["All", "Shoes", "Clothes", "Accessories", "Furniture", "Toys"];
 
   @override
   void initState() {
     super.initState();
-    _loadProducts();
-    _loadCategoriess();
-  }
-
-  void _loadProducts() {
     _productsFuture = _productService.getProducts();
-  }
-
-  void _loadCategoriess() {
     _categoriesFuture = _categoryService.getCategories();
   }
 
   void _reload() {
     setState(() {
-      _loadProducts();
+      _productsFuture = _productService.getProducts();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final color = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: color.background,
 
-      // 🧠 APP BAR
+      // 🌟 APP BAR (clean + modern)
       appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        title: const Text("Online Shop"),
+        backgroundColor: color.surface,
+        elevation: 0,
+        title: const Text(
+          "Shop",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
-          // 🌙 Theme toggle
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _reload,
+          ),
           IconButton(
             icon: Icon(
               Theme.of(context).brightness == Brightness.dark
                   ? Icons.light_mode
                   : Icons.dark_mode,
             ),
-            onPressed: () {
-              context.read<ThemeService>().toggle();
-            },
+            onPressed: () => context.read<ThemeService>().toggle(),
           ),
-
           const SizedBox(width: 8),
-
-          // 🌍 Language
-          DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: selectedLanguage,
-              dropdownColor: colorScheme.surface,
-              items: [
-                DropdownMenuItem(
-                  value: "DE",
-                  child: Text("DE", style: TextStyle(color: colorScheme.onSurface)),
-                ),
-                DropdownMenuItem(
-                  value: "EN",
-                  child: Text("EN", style: TextStyle(color: colorScheme.onSurface)),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  selectedLanguage = value!;
-                });
-              },
-            ),
-          ),
-
-          const SizedBox(width: 8),
-
-          IconButton(
-            icon: Icon(Icons.refresh, color: colorScheme.onSurface),
-            onPressed: _reload,
-          ),
-
-          const SizedBox(width: 8),
-
-          IconButton(
-            icon: Icon(Icons.person, color: colorScheme.onSurface),
-            onPressed: () {},
-          ),
         ],
       ),
 
-      // 📂 DRAWER
       drawer: FutureBuilder<List<CategoryView>>(
-    future: _categoriesFuture,
-      builder: (context, snapshot) {
+        future: _categoriesFuture,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Drawer(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-        if (!snapshot.hasData) {
-          return const Drawer(
-            child: Center(child: CircularProgressIndicator()),
+          return ShopPageDrawer(
+            categories: snapshot.data!,
+            selectedCategoryId: selectedCategoryId,
+            onSelect: (id) {
+              setState(() => selectedCategoryId = id);
+              Navigator.pop(context);
+            },
           );
-        }
-
-        final categories = snapshot.data!;
-
-
-        return ShopPageDrawer(
-          categories: categories,
-          selectedCategoryId: selectedCategoryId,
-          onSelect: (cat) {
-            setState(() {
-              selectedCategoryId = cat;
-            });
-            Navigator.pop(context);
-          },
-        );
-      },
-    ),
+        },
+      ),
 
       // 🛍️ BODY
       body: FutureBuilder<List<ProductView>>(
         future: _productsFuture,
         builder: (context, snapshot) {
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                "Fehler beim Laden der Produkte",
-                style: TextStyle(color: colorScheme.error),
-              ),
-            );
+            return const Center(child: Text("Fehler beim Laden"));
           }
 
           final products = snapshot.data ?? [];
 
           final filtered = selectedCategoryId == 0
               ? products
-              : products
-              .where((p) => p.category.id == selectedCategoryId)
-              .toList();
-
-          if (filtered.isEmpty) {
-            return const Center(child: Text("Keine Produkte gefunden"));
-          }
+              : products.where((p) => p.category.id == selectedCategoryId).toList();
 
           return Padding(
             padding: const EdgeInsets.all(12),
             child: GridView.builder(
               itemCount: filtered.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 0.75,
+                crossAxisCount: 2,
+                childAspectRatio: 0.72,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
-              itemBuilder: (context, index) {
-                final product = filtered[index];
+              itemBuilder: (context, i) {
+                final p = filtered[i];
 
-                return Card(
-                  color: colorScheme.surface,
-                  elevation: 2,
+                return Container(
+                  decoration: BoxDecoration(
+                    color: color.surface,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
 
-                      // 🖼️ IMAGE
+                      // 🖼 IMAGE (modern rounded)
                       Expanded(
                         child: ClipRRect(
                           borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12),
+                            top: Radius.circular(18),
                           ),
                           child: Image.network(
-                            product.productImage.url,
+                            p.productImage.url,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
 
+                      // 📦 INFO
                       Padding(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
 
-                            // NAME
                             Text(
-                              product.name,
-                              style: TextStyle(
-                                color: colorScheme.onSurface,
-                                fontWeight: FontWeight.bold,
+                              p.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
 
                             const SizedBox(height: 4),
 
-                            // CATEGORY
                             Text(
-                              product.category.name,
+                              p.category.name,
                               style: TextStyle(
-                                color: colorScheme.onSurfaceVariant,
                                 fontSize: 12,
+                                color: color.onSurfaceVariant,
                               ),
                             ),
 
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 8),
 
-                            // PRICE
-                            Text(
-                              "€${product.price.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
 
-                            const SizedBox(height: 10),
-
-                            // BUTTON
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: colorScheme.primary,
-                                  foregroundColor: colorScheme.onPrimary,
+                                Text(
+                                  "€${p.price.toStringAsFixed(2)}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: color.primary,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  // TODO: Add to cart
-                                },
-                                child: const Text("Add to Cart"),
-                              ),
+
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: color.primary,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.add, size: 18),
+                                    color: color.onPrimary,
+                                    onPressed: () {
+                                      final auth = context.read<AuthService>();
+
+                                      if (!auth.isLoggedIn) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            title: const Text("Login erforderlich"),
+                                            content: const Text(
+                                              "Du musst dich einloggen, um Produkte in den Warenkorb zu legen.",
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(context),
+                                                child: const Text("Abbrechen"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.pushNamed(context, "/login");
+                                                },
+                                                child: const Text("Login"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                        return;
+                                      }
+
+                                      // 🛒 echte Cart Logik kommt hier später
+                                      print("Produkt hinzugefügt: ${p.name}");
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

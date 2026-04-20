@@ -19,14 +19,15 @@ class _LoginPageState extends State<LoginPage> {
 
   void login() async {
     final auth = context.read<AuthService>();
+    final api = context.read<ApiService>();
+
     final result = await api.login(
       emailController.text,
       passwordController.text,
     );
 
     if (result != null) {
-      print("Login erfolgreich");
-      await auth.login(result["token"]);
+      await auth.setToken(result["token"]);
     }
   }
 

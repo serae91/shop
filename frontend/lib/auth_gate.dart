@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/shop_page/shop_page.dart';
 import 'package:frontend/services/api_services.dart';
+import 'package:frontend/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
-import 'services/auth_service.dart';
 import 'login_page.dart';
-import 'pages/shop_page/shop_page.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -28,14 +29,12 @@ class _AuthGateState extends State<AuthGate> {
 
     await auth.loadToken();
 
-    try {
-      if (auth.token != null) {
+    if (auth.isLoggedIn) {
+      try {
         await api.getMe();
-      } else {
+      } catch (_) {
         await auth.logout();
       }
-    } catch (_) {
-      await auth.logout();
     }
 
     if (!mounted) return;
@@ -55,6 +54,8 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return auth.isLoggedIn ? const ShopPage() : const LoginPage();
+    return auth.isLoggedIn
+        ? const ShopPage()
+        : const LoginPage();
   }
 }

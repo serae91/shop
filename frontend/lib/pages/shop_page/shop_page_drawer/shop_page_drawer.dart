@@ -15,90 +15,58 @@ class ShopPageDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<CategoryView> extendedCategories = [
+    final color = Theme.of(context).colorScheme;
+
+    final list = [
       CategoryView(id: 0, name: "All"),
       ...categories,
     ];
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Drawer(
       child: Container(
-        color: colorScheme.surface,
+        color: color.surface,
         child: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🧠 Header
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  "Shop",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
-                  ),
+
+              const SizedBox(height: 16),
+
+              Text(
+                "Categories",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: color.onSurface,
                 ),
               ),
 
-              Divider(color: colorScheme.outlineVariant),
+              const SizedBox(height: 12),
 
-              // 📂 Kategorien
+              const Divider(),
+
               Expanded(
-                child: ListView(
-                  children: extendedCategories.map((cat) {
-                    final isSelected = cat.id == selectedCategoryId;
+                child: ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (context, i) {
+                    final c = list[i];
+                    final selected = c.id == selectedCategoryId;
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                    return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? colorScheme.primary.withOpacity(0.15)
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ListTile(
-                          leading: Icon(
-                            Icons.category,
-                            color: isSelected
-                                ? colorScheme.primary
-                                : colorScheme.onSurfaceVariant,
-                          ),
-                          title: Text(
-                            cat.name,
-                            style: TextStyle(
-                              color: isSelected
-                                  ? colorScheme.primary
-                                  : colorScheme.onSurface,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                          onTap: () => onSelect(cat.id),
-                        ),
+                      tileColor: selected
+                          ? color.primary.withOpacity(0.1)
+                          : null,
+                      leading: Icon(
+                        Icons.category,
+                        color: selected ? color.primary : color.onSurfaceVariant,
                       ),
+                      title: Text(c.name),
+                      onTap: () => onSelect(c.id),
                     );
-                  }).toList(),
+                  },
                 ),
-              ),
-
-              Divider(color: colorScheme.outlineVariant),
-
-              // ⚙️ Footer
-              ListTile(
-                leading: Icon(Icons.settings,
-                    color: colorScheme.onSurfaceVariant),
-                title: Text(
-                  "Settings",
-                  style: TextStyle(color: colorScheme.onSurface),
-                ),
-                onTap: () {},
               ),
             ],
           ),
