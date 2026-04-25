@@ -27,7 +27,6 @@ class ShopPageProduct extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // 🖼 IMAGE (modern rounded)
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.vertical(
@@ -39,8 +38,6 @@ class ShopPageProduct extends StatelessWidget {
               ),
             ),
           ),
-
-          // 📦 INFO
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -89,14 +86,14 @@ class ShopPageProduct extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                title: const Text("Login erforderlich"),
+                                title: const Text("Login required"),
                                 content: const Text(
-                                  "Du musst dich einloggen, um Produkte in den Warenkorb zu legen.",
+                                  "Du need to login to add products to the cart.",
                                 ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Abbrechen"),
+                                    child: const Text("cancel"),
                                   ),
                                   ElevatedButton(
                                     onPressed: () {

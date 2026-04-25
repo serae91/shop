@@ -1,65 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/services/api_services.dart';
-import 'package:frontend/services/auth_service.dart';
-import 'package:frontend/services/dio_client.dart';
-import 'package:frontend/services/theme_service.dart';
 import 'package:provider/provider.dart';
 
-import 'auth_gate.dart';
+import 'router/app_router.dart';
+import 'services/api_services.dart';
+import 'services/auth_service.dart';
+import 'services/theme_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final auth = AuthService();
-
   await auth.loadToken();
-  DioClient.init(auth);
 
-  runApp(const MyApp());
+  runApp(MyApp(auth: auth));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthService auth;
+
+  const MyApp({super.key, required this.auth});
 
   @override
   Widget build(BuildContext context) {
+    final router = AppRouter(auth).router;
+
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider(create: (_) => ThemeService()),
-        ChangeNotifierProvider(create: (_) => AuthService()),
-        Provider<ApiService>(create: (context) => ApiService(),),
+        Provider(create: (_) => ApiService()),
       ],
-      child: const AppRoot(),
-    );
-  }
-}
+      child: Builder(
+        builder: (context) {
+          final theme = context.watch<ThemeService>();
 
-class AppRoot extends StatefulWidget {
-  const AppRoot({super.key});
-
-  @override
-  State<AppRoot> createState() => _AppRootState();
-}
-
-class _AppRootState extends State<AppRoot> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final auth = context.read<AuthService>();
-    DioClient.init(auth);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.watch<ThemeService>();
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: theme.mode,
-      home: const AuthGate(),
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: router,
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: theme.mode,
+          );
+        },
+      ),
     );
   }
 }

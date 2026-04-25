@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/shop_page/shop_page_app_bar/shop_page_app_bar.dart';
+import 'package:frontend/features/shop_page/shop_page_drawer/shop_page_drawer.dart';
+import 'package:frontend/features/shop_page/shop_page_product/shop_page_product.dart';
 import 'package:frontend/model/product_view.dart';
-import 'package:frontend/pages/shop_page/shop_page_app_bar/shop_page_app_bar.dart';
-import 'package:frontend/pages/shop_page/shop_page_drawer/shop_page_drawer.dart';
-import 'package:frontend/pages/shop_page/shop_page_product/shop_page_product.dart';
 import 'package:frontend/services/category_service.dart';
 import 'package:frontend/services/product_service.dart';
 
@@ -32,12 +32,6 @@ class _ShopPageState extends State<ShopPage> {
     _categoriesFuture = _categoryService.getCategories();
   }
 
-  void _reload() {
-    setState(() {
-      _productsFuture = _productService.getProducts();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
@@ -45,7 +39,6 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       backgroundColor: color.background,
 
-      // 🌟 APP BAR (clean + modern)
       appBar: ShopPageAppBar(),
 
       drawer: FutureBuilder<List<CategoryView>>(

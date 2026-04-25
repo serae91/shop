@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:provider/provider.dart';
-import './services/api_services.dart';
+import '../../services/api_services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,8 +14,6 @@ class _LoginPageState extends State<LoginPage> {
   final api = ApiService();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-
 
   void login() async {
     final auth = context.read<AuthService>();
@@ -61,7 +59,6 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.white,
                 ),
                 const SizedBox(height: 20),
-
                 const Text(
                   "Welcome Back",
                   style: TextStyle(
@@ -70,9 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 30),
-
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -84,9 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 15),
-
                 TextField(
                   controller: passwordController,
                   obscureText: true,
@@ -99,9 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
                 SizedBox(
                   width: double.infinity,
                   height: 50,
