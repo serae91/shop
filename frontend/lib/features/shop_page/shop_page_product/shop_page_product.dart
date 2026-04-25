@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/model/product_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../router/app_routes.dart';
 import '../../../services/auth_service.dart';
 
 class ShopPageProduct extends StatelessWidget {
@@ -88,7 +90,7 @@ class ShopPageProduct extends StatelessWidget {
                               builder: (_) => AlertDialog(
                                 title: const Text("Login required"),
                                 content: const Text(
-                                  "Du need to login to add products to the cart.",
+                                  "You need to login to add products to the cart.",
                                 ),
                                 actions: [
                                   TextButton(
@@ -98,7 +100,7 @@ class ShopPageProduct extends StatelessWidget {
                                   ElevatedButton(
                                     onPressed: () {
                                       Navigator.pop(context);
-                                      Navigator.pushNamed(context, "/login");
+                                      context.go(AppRoutes.login.path);
                                     },
                                     child: const Text("Login"),
                                   ),
