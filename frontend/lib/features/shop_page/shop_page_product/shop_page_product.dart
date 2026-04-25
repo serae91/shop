@@ -3,8 +3,10 @@ import 'package:frontend/model/product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../model/cart_item_view.dart';
 import '../../../router/app_routes.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/cart_service.dart';
 
 class ShopPageProduct extends StatelessWidget {
   final ProductView product;
@@ -13,6 +15,8 @@ class ShopPageProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartService>();
+    final quantity = cart.quantityFor(product.id);
     final color = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
@@ -73,6 +77,7 @@ class ShopPageProduct extends StatelessWidget {
                         color: color.primary,
                       ),
                     ),
+                    Text('In Cart: ${quantity}'),
                     Container(
                       decoration: BoxDecoration(
                         color: color.primary,
@@ -109,9 +114,13 @@ class ShopPageProduct extends StatelessWidget {
                             );
                             return;
                           }
-
-                          // 🛒 echte Cart Logik kommt hier später
-                          print("Produkt hinzugefügt: ${product.name}");
+                          context.read<CartService>().addProduct(
+                                CartItemView(
+                                  id: 0,
+                                  product: product,
+                                  quantity: 1,
+                                ),
+                              );
                         },
                       ),
                     ),
