@@ -80,6 +80,19 @@ class ShopPageProduct extends StatelessWidget {
                     Text('In Cart: ${quantity}'),
                     Container(
                       decoration: BoxDecoration(
+                        color: color.secondary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.remove, size: 18),
+                        color: color.onPrimary,
+                        onPressed: () {
+                          cart.removeProduct(product.id, 1);
+                        },
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
                         color: color.primary,
                         borderRadius: BorderRadius.circular(8),
                       ),

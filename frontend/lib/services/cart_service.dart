@@ -62,7 +62,7 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeProduct(int productId) {
+  void removeProduct(int productId, int quantity) {
     if (_cart == null) return;
 
     final items = List<CartItemView>.from(_cart!.cartItems);
@@ -75,11 +75,11 @@ class CartService extends ChangeNotifier {
 
     final item = items[index];
 
-    if (item.quantity > 1) {
+    if (item.quantity > quantity) {
       items[index] = CartItemView(
         id: item.id,
         product: item.product,
-        quantity: item.quantity - 1,
+        quantity: item.quantity - quantity,
       );
     } else {
       items.removeAt(index);
