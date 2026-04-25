@@ -9,7 +9,7 @@ class CategoryView {
 
   factory CategoryView.fromJson(Map<String, dynamic> json) {
     return CategoryView(
-      id: json['id'],
+      id: (json['id'] as num).toInt(),
       name: json['name'],
     );
   }

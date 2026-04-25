@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/cart_service.dart';
 import 'package:provider/provider.dart';
 
 import 'router/app_router.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider(create: (_) => ThemeService()),
+        ChangeNotifierProvider(create: (_) => CartService()),
         Provider(create: (_) => ApiService()),
       ],
       child: Builder(

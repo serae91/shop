@@ -24,13 +24,13 @@ class ProductView {
 
   factory ProductView.fromJson(Map<String, dynamic> json) {
     return ProductView(
-      id: json['id'],
+      id: (json['id'] as num).toInt(),
       name: json['name'],
       description: json['description'],
       price: (json['price'] as num).toDouble(),
       stock: json['stock'],
       category: CategoryView.fromJson(json['category']),
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: DateTime.parse(json['createdAt'] as String),
       productImage: ProductImageView.fromJson(json['productImage']),
     );
   }

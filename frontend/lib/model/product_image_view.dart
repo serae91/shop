@@ -9,7 +9,7 @@ class ProductImageView {
 
   factory ProductImageView.fromJson(Map<String, dynamic> json) {
     return ProductImageView(
-      id: json['id'],
+      id: (json['id'] as num).toInt(),
       url: json['url'],
     );
   }
