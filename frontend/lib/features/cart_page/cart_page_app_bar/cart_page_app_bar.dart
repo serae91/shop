@@ -36,6 +36,7 @@ class CartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () => context.go(AppRoutes.shop.path),
           icon: const Icon(Icons.shop),
         ),
+        const SizedBox(width: 8),
         IconButton(
           tooltip: l10n.toggleTheme,
           icon: Icon(

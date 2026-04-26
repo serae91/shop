@@ -42,6 +42,7 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: const Icon(Icons.shopping_cart_outlined),
           ),
         ),
+        const SizedBox(width: 8),
         IconButton(
           tooltip: l10n.toggleTheme,
           icon: Icon(

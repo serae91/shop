@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/services/cart_service.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'router/app_router.dart';
@@ -21,8 +22,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AuthService auth;
+  late final GoRouter _router = AppRouter(auth).router;
 
-  const MyApp({super.key, required this.auth});
+  MyApp({super.key, required this.auth});
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +36,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocaleService()),
         Provider(create: (_) => ApiService()),
       ],
-      child: const _AppRoot(),
+      child: _AppRoot(router: _router),
     );
   }
 }
 
 class _AppRoot extends StatelessWidget {
-  const _AppRoot();
+  final GoRouter router;
+
+  const _AppRoot({
+    required this.router,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeService>();
-    final auth = context.watch<AuthService>();
     final localeService = context.watch<LocaleService>();
-
-    final router = AppRouter(auth).router;
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
