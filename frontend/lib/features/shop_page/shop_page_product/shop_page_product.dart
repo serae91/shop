@@ -3,7 +3,6 @@ import 'package:frontend/model/product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../model/cart_item_view.dart';
 import '../../../router/app_routes.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/cart_service.dart';
@@ -12,6 +11,31 @@ class ShopPageProduct extends StatelessWidget {
   final ProductView product;
 
   const ShopPageProduct({super.key, required this.product});
+
+  void _showLoginDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Login required'),
+        content: const Text(
+          'You need to login to add products to the cart.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              context.go(AppRoutes.login.path);
+            },
+            child: const Text('Login'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +110,10 @@ class ShopPageProduct extends StatelessWidget {
                       child: IconButton(
                         icon: const Icon(Icons.remove, size: 18),
                         color: color.onPrimary,
-                        onPressed: () {
-                          cart.removeProduct(product.id, 1);
-                        },
+                        onPressed: quantity > 0
+                            ? () =>
+                                context.read<CartService>().decrement(product)
+                            : null,
                       ),
                     ),
                     Container(
@@ -103,37 +128,11 @@ class ShopPageProduct extends StatelessWidget {
                           final auth = context.read<AuthService>();
 
                           if (!auth.isLoggedIn) {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: const Text("Login required"),
-                                content: const Text(
-                                  "You need to login to add products to the cart.",
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("cancel"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      context.go(AppRoutes.login.path);
-                                    },
-                                    child: const Text("Login"),
-                                  ),
-                                ],
-                              ),
-                            );
+                            _showLoginDialog(context);
                             return;
                           }
-                          context.read<CartService>().addProduct(
-                                CartItemView(
-                                  id: 0,
-                                  product: product,
-                                  quantity: 1,
-                                ),
-                              );
+
+                          context.read<CartService>().add(product);
                         },
                       ),
                     ),

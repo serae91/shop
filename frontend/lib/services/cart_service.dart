@@ -2,18 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:frontend/model/cart_item_view.dart';
 import 'package:frontend/model/cart_view.dart';
 
+import '../model/product_view.dart';
+
 class CartService extends ChangeNotifier {
   CartView? _cart;
 
   CartView? get cart => _cart;
 
-  bool get isEmpty => _cart == null || _cart!.cartItems.isEmpty;
-
   List<CartItemView> get items => _cart?.cartItems ?? [];
 
-  int get totalQuantity {
-    return items.fold(0, (sum, item) => sum + item.quantity);
-  }
+  bool get isEmpty => items.isEmpty;
+
+  int get totalQuantity => items.fold(0, (sum, item) => sum + item.quantity);
 
   int quantityFor(int productId) {
     final item = items.where((e) => e.product.id == productId).firstOrNull;
@@ -25,77 +25,68 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addProduct(CartItemView newItem) {
-    if (_cart == null) {
-      _cart = CartView(
-        id: 0,
-        createdAt: DateTime.now(),
-        cartItems: [newItem],
-      );
-      notifyListeners();
-      return;
-    }
-
-    final items = List<CartItemView>.from(_cart!.cartItems);
-
-    final index = items.indexWhere(
-      (e) => e.product.id == newItem.product.id,
-    );
-
-    if (index >= 0) {
-      final existing = items[index];
-      items[index] = CartItemView(
-        id: existing.id,
-        product: existing.product,
-        quantity: existing.quantity + newItem.quantity,
-      );
-    } else {
-      items.add(newItem);
-    }
-
-    _cart = CartView(
-      id: _cart!.id,
-      createdAt: _cart!.createdAt,
-      cartItems: items,
-    );
-
+  void clear() {
+    _cart = null;
     notifyListeners();
   }
 
-  void removeProduct(int productId, int quantity) {
-    if (_cart == null) return;
+  void add(ProductView product, {int quantity = 1}) {
+    final updatedItems = List<CartItemView>.from(items);
 
-    final items = List<CartItemView>.from(_cart!.cartItems);
+    final index = updatedItems.indexWhere(
+      (item) => item.product.id == product.id,
+    );
 
-    final index = items.indexWhere(
-      (e) => e.product.id == productId,
+    if (index >= 0) {
+      final existing = updatedItems[index];
+      updatedItems[index] = CartItemView(
+        id: existing.id,
+        product: existing.product,
+        quantity: existing.quantity + quantity,
+      );
+    } else {
+      updatedItems.add(
+        CartItemView(
+          id: 0,
+          product: product,
+          quantity: quantity,
+        ),
+      );
+    }
+
+    _updateCart(updatedItems);
+  }
+
+  void decrement(ProductView product, {int quantity = 1}) {
+    final updatedItems = List<CartItemView>.from(items);
+
+    final index = updatedItems.indexWhere(
+      (item) => item.product.id == product.id,
     );
 
     if (index == -1) return;
 
-    final item = items[index];
+    final existing = updatedItems[index];
 
-    if (item.quantity > quantity) {
-      items[index] = CartItemView(
-        id: item.id,
-        product: item.product,
-        quantity: item.quantity - quantity,
+    if (existing.quantity > quantity) {
+      updatedItems[index] = CartItemView(
+        id: existing.id,
+        product: existing.product,
+        quantity: existing.quantity - quantity,
       );
     } else {
-      items.removeAt(index);
+      updatedItems.removeAt(index);
     }
 
-    _cart = CartView(
-      id: _cart!.id,
-      createdAt: _cart!.createdAt,
-      cartItems: items,
-    );
-
-    notifyListeners();
+    _updateCart(updatedItems);
   }
 
-  void clear() {
-    _cart = null;
+  void _updateCart(List<CartItemView> updatedItems) {
+    _cart = CartView(
+      id: _cart?.id ?? 0,
+      createdAt: _cart?.createdAt ?? DateTime.now(),
+      cartItems: updatedItems,
+    );
     notifyListeners();
   }
 }
