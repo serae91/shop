@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:provider/provider.dart';
+
 import '../../services/api_services.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void login() async {
+  void login(String loginSuccess) async {
     final auth = context.read<AuthService>();
     final api = context.read<ApiService>();
 
@@ -30,13 +32,14 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login erfolgreich")),
+        SnackBar(content: Text(loginSuccess)),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -59,8 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.white,
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  "Welcome Back",
+                Text(
+                  l10n.welcomeBack,
                   style: TextStyle(
                     fontSize: 28,
                     color: Colors.white,
@@ -73,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    hintText: "Email",
+                    hintText: l10n.email,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -86,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    hintText: "Password",
+                    hintText: l10n.password,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -97,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: login,
+                    onPressed: () => login(l10n.loginSuccess),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.deepPurple,
@@ -105,9 +108,9 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(fontSize: 16),
+                    child: Text(
+                      l10n.login,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class CartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final color = Theme.of(context).colorScheme;
 
     return AppBar(
@@ -22,7 +24,7 @@ class CartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: color.surface,
       elevation: 0,
       title: Text(
-        'Shopping Cart',
+        l10n.cartTitle,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: color.onSurface,
@@ -30,12 +32,12 @@ class CartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          tooltip: 'Shop',
+          tooltip: l10n.appTitle,
           onPressed: () => context.go(AppRoutes.shop.path),
           icon: const Icon(Icons.shop),
         ),
         IconButton(
-          tooltip: 'Toggle Theme',
+          tooltip: l10n.toggleTheme,
           icon: Icon(
             Theme.of(context).brightness == Brightness.dark
                 ? Icons.light_mode

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/model/category_view.dart';
 
 class ShopPageSidebar extends StatelessWidget {
@@ -15,10 +16,11 @@ class ShopPageSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final color = Theme.of(context).colorScheme;
 
     final list = [
-      CategoryView(id: 0, name: "All"),
+      CategoryView(id: 0, name: l10n.categoryAll),
       ...categories,
     ];
 
@@ -33,7 +35,7 @@ class ShopPageSidebar extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Categories",
+                l10n.categories,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

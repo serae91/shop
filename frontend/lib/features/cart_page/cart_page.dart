@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/features/cart_page/cart_page_app_bar/cart_page_app_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cart = context.watch<CartService>();
     final theme = Theme.of(context);
     final color = theme.colorScheme;
@@ -29,14 +31,14 @@ class CartPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'Your cart is empty',
+                l10n.emptyCart,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Add some products to get started.',
+                l10n.addProductsToStart,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: color.onSurfaceVariant,
                 ),
@@ -157,6 +159,7 @@ class _CartItemCard extends StatelessWidget {
 class _CartSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cart = context.watch<CartService>();
     final theme = Theme.of(context);
     final color = theme.colorScheme;
@@ -189,12 +192,12 @@ class _CartSummary extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SummaryRow(label: 'Subtotal', value: subtotal),
+            _SummaryRow(label: l10n.subtotal, value: subtotal),
             const SizedBox(height: 8),
-            const _SummaryRow(label: 'Shipping', value: shipping),
+            _SummaryRow(label: l10n.shipping, value: shipping),
             const Divider(height: 24),
             _SummaryRow(
-              label: 'Total',
+              label: l10n.total,
               value: total,
               isTotal: true,
             ),
@@ -205,7 +208,7 @@ class _CartSummary extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => context.go(AppRoutes.checkout.path),
                 child: Text(
-                  'Proceed to Checkout',
+                  l10n.proceedToCheckout,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: color.onPrimary,
                     fontWeight: FontWeight.bold,

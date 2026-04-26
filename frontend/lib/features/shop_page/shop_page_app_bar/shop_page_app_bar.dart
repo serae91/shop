@@ -18,8 +18,6 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
     final l10n = AppLocalizations.of(context)!;
     final color = Theme.of(context).colorScheme;
     final cart = context.watch<CartService>();
-    print('l10n.appTitle');
-    print(l10n.appTitle);
 
     return AppBar(
       iconTheme: IconThemeData(

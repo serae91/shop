@@ -30,7 +30,7 @@ class ShopPageProduct extends StatelessWidget {
               Navigator.pop(dialogContext);
               context.go(AppRoutes.login.path);
             },
-            child: const Text('Login'),
+            child: Text(l10n.login),
           ),
         ],
       ),
