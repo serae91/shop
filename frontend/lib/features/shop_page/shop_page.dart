@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/shop_page/shop_page_app_bar/shop_page_app_bar.dart';
-import 'package:frontend/features/shop_page/shop_page_drawer/shop_page_drawer.dart';
 import 'package:frontend/features/shop_page/shop_page_product/shop_page_product.dart';
+import 'package:frontend/features/shop_page/shop_page_sidebar/shop_page_sidebar.dart';
 import 'package:frontend/model/product_view.dart';
 import 'package:frontend/services/category_service.dart';
 import 'package:frontend/services/product_service.dart';
@@ -55,7 +55,7 @@ class _ShopPageState extends State<ShopPage> {
                 return Material(
                   color: color.surface,
                   elevation: 1,
-                  child: ShopPageDrawer(
+                  child: ShopPageSidebar(
                     categories: snapshot.data!,
                     selectedCategoryId: selectedCategoryId,
                     onSelect: (id) {
@@ -103,7 +103,7 @@ class _ShopPageState extends State<ShopPage> {
                     itemCount: filtered.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
+                      crossAxisCount: 3,
                       childAspectRatio: 0.72,
                       mainAxisSpacing: 16,
                       crossAxisSpacing: 16,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -14,8 +15,11 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final color = Theme.of(context).colorScheme;
     final cart = context.watch<CartService>();
+    print('l10n.appTitle');
+    print(l10n.appTitle);
 
     return AppBar(
       iconTheme: IconThemeData(
@@ -24,7 +28,7 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: color.surface,
       elevation: 0,
       title: Text(
-        'Shop',
+        l10n.appTitle,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: color.onSurface,
