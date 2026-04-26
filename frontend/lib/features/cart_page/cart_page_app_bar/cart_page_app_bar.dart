@@ -3,11 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../router/app_routes.dart';
-import '../../../services/cart_service.dart';
 import '../../../services/theme_service.dart';
 
-class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ShopPageAppBar({super.key});
+class CartPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CartPageAppBar({super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -15,24 +14,19 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
-    final cart = context.watch<CartService>();
 
     return AppBar(
       backgroundColor: color.surface,
       elevation: 0,
       title: const Text(
-        'Shop',
+        'Shopping Cart',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       actions: [
         IconButton(
-          tooltip: 'Shopping Cart',
-          onPressed: () => context.go(AppRoutes.cart.path),
-          icon: Badge(
-            isLabelVisible: cart.totalQuantity > 0,
-            label: Text('${cart.totalQuantity}'),
-            child: const Icon(Icons.shopping_cart_outlined),
-          ),
+          tooltip: 'Shop',
+          onPressed: () => context.go(AppRoutes.shop.path),
+          icon: const Icon(Icons.shop),
         ),
         IconButton(
           tooltip: 'Toggle Theme',
