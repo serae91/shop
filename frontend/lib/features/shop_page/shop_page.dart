@@ -17,7 +17,7 @@ class ShopPage extends StatefulWidget {
 
 class _ShopPageState extends State<ShopPage> {
   int selectedCategoryId = 0;
-  String selectedLanguage = "DE";
+  String selectedLanguage = 'DE';
 
   final ProductService _productService = ProductService();
   final CategoryService _categoryService = CategoryService();
@@ -38,67 +38,87 @@ class _ShopPageState extends State<ShopPage> {
 
     return Scaffold(
       backgroundColor: color.background,
+      appBar: const ShopPageAppBar(),
+      body: Row(
+        children: [
+          SizedBox(
+            width: 280,
+            child: FutureBuilder<List<CategoryView>>(
+              future: _categoriesFuture,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-      appBar: ShopPageAppBar(),
-
-      drawer: FutureBuilder<List<CategoryView>>(
-        future: _categoriesFuture,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Drawer(
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-
-          return ShopPageDrawer(
-            categories: snapshot.data!,
-            selectedCategoryId: selectedCategoryId,
-            onSelect: (id) {
-              setState(() => selectedCategoryId = id);
-              Navigator.pop(context);
-            },
-          );
-        },
-      ),
-
-      // 🛍️ BODY
-      body: FutureBuilder<List<ProductView>>(
-        future: _productsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return const Center(child: Text("Fehler beim Laden"));
-          }
-
-          final products = snapshot.data ?? [];
-
-          final filtered = selectedCategoryId == 0
-              ? products
-              : products
-                  .where((p) => p.category.id == selectedCategoryId)
-                  .toList();
-
-          return Padding(
-            padding: const EdgeInsets.all(12),
-            child: GridView.builder(
-              itemCount: filtered.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                childAspectRatio: 0.72,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-              ),
-              itemBuilder: (context, i) {
-                final p = filtered[i];
-
-                return ShopPageProduct(product: p);
+                return Material(
+                  color: color.surface,
+                  elevation: 1,
+                  child: ShopPageDrawer(
+                    categories: snapshot.data!,
+                    selectedCategoryId: selectedCategoryId,
+                    onSelect: (id) {
+                      setState(() => selectedCategoryId = id);
+                    },
+                  ),
+                );
               },
             ),
-          );
-        },
+          ),
+          VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: color.outlineVariant,
+          ),
+          Expanded(
+            child: FutureBuilder<List<ProductView>>(
+              future: _productsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Fehler beim Laden'),
+                  );
+                }
+
+                final products = snapshot.data ?? [];
+
+                final filtered = selectedCategoryId == 0
+                    ? products
+                    : products
+                        .where(
+                          (p) => p.category.id == selectedCategoryId,
+                        )
+                        .toList();
+
+                return Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: GridView.builder(
+                    itemCount: filtered.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 0.72,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ShopPageProduct(
+                        product: filtered[index],
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

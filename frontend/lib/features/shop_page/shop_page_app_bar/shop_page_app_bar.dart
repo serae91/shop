@@ -18,11 +18,17 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
     final cart = context.watch<CartService>();
 
     return AppBar(
+      iconTheme: IconThemeData(
+        color: color.onSurface,
+      ),
       backgroundColor: color.surface,
       elevation: 0,
-      title: const Text(
+      title: Text(
         'Shop',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: color.onSurface,
+            ),
       ),
       actions: [
         IconButton(

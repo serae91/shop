@@ -23,10 +23,9 @@ class CartPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.shopping_cart_outlined,
                 size: 96,
-                color: color.outline,
               ),
               const SizedBox(height: 24),
               Text(
