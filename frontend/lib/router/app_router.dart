@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/login_page.dart';
 import '../features/cart_page/cart_page.dart';
+import '../features/checkout_page/checkout_page.dart';
 import '../features/shop_page/shop_page.dart';
 import '../services/auth_service.dart';
 import 'app_routes.dart';
@@ -52,11 +53,11 @@ class AppRouter {
         name: AppRoutes.cart.name,
         builder: (_, __) => const CartPage(),
       ),
-      /*GoRoute(
+      GoRoute(
         path: AppRoutes.checkout.path,
         name: AppRoutes.checkout.name,
         builder: (_, __) => const CheckoutPage(),
-      ),*/
+      ),
     ],
     errorBuilder: (context, state) => Scaffold(
       appBar: AppBar(title: const Text('Seite nicht gefunden')),

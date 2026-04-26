@@ -11,6 +11,8 @@ class CartItemView {
     required this.quantity,
   });
 
+  double get subtotal => quantity * product.price;
+
   factory CartItemView.fromJson(Map<String, dynamic> json) {
     return CartItemView(
       id: (json['id'] as num).toInt(),

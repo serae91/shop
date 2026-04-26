@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/cart_page/cart_page_app_bar/cart_page_app_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/cart_item_view.dart';
+import '../../router/app_routes.dart';
 import '../../services/cart_service.dart';
 
 class CartPage extends StatelessWidget {
@@ -202,9 +204,7 @@ class _CartSummary extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Checkout
-                },
+                onPressed: () => context.go(AppRoutes.checkout.path),
                 child: Text(
                   'Proceed to Checkout',
                   style: theme.textTheme.titleMedium?.copyWith(
