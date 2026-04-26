@@ -36,7 +36,7 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          tooltip: 'Shopping Cart',
+          tooltip: l10n.cartTitle,
           onPressed: () => context.go(AppRoutes.cart.path),
           icon: Badge(
             isLabelVisible: cart.totalQuantity > 0,
@@ -45,7 +45,7 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         IconButton(
-          tooltip: 'Toggle Theme',
+          tooltip: l10n.toggleTheme,
           icon: Icon(
             Theme.of(context).brightness == Brightness.dark
                 ? Icons.light_mode

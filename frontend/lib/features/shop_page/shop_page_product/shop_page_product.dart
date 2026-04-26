@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/model/product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +14,16 @@ class ShopPageProduct extends StatelessWidget {
   const ShopPageProduct({super.key, required this.product});
 
   void _showLoginDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Login required'),
-        content: const Text(
-          'You need to login to add products to the cart.',
-        ),
+        title: Text(l10n.loginRequiredModalTitle),
+        content: Text(l10n.loginRequiredModalText),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -39,6 +39,7 @@ class ShopPageProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cart = context.watch<CartService>();
     final quantity = cart.quantityFor(product.id);
     final color = Theme.of(context).colorScheme;
@@ -101,7 +102,7 @@ class ShopPageProduct extends StatelessWidget {
                         color: color.primary,
                       ),
                     ),
-                    Text('In Cart: ${quantity}'),
+                    Text('${l10n.inCart}: ${quantity}'),
                     Container(
                       decoration: BoxDecoration(
                         color: color.secondary,

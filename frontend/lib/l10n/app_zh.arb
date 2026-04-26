@@ -1,7 +1,19 @@
 {
   "appTitle": "阿德小鋪",
+  "addProductsToStart":"加入一些商品開始使用",
+  "categories": "種類",
+  "inCart": "在購物車中",
+  "cartIsEmpty": "您的購物車是空的",
+  "toggleTheme": "切換主題",
+  "loginRequiredModalTitle": "需要登入",
+  "loginRequiredModalText": "您需要登入才能將商品加入購物車。",
   "cartTitle": "購物車",
   "emptyCart": "您的購物車是空的",
   "addProducts": "Füge Produkte hinzu, um zu starten.",
-  "loginSuccess": "登入成功"
+  "proceedToCheckout": "前往結帳",
+  "login": "登入",
+  "loginSuccess": "登入成功",
+  "subtotal": "小計",
+  "total": "總計",
+  "cancel": "取消"
 }

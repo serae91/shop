@@ -1,6 +1,19 @@
 {
-  "appTitle": "Shoppp",
-  "cartTitle": "Shopping Cart",
-  "emptyCart": "Your cart is empty",
-  "addProducts": "Add some products to get started."
+  "appTitle": "Shop",
+  "addProductsToStart":"Add products to start",
+  "categories": "Categories",
+  "inCart": "In cart",
+  "cartIsEmpty": "Cart is empty",
+  "toggleTheme": "Toggle theme",
+  "loginRequiredModalTitle": "Login required",
+  "loginRequiredModalText": "You need to login to add products to the cart.",
+  "cartTitle": "Cart",
+  "emptyCart": "Empty cart",
+  "addProducts": "Add products to start.",
+  "proceedToCheckout": "Proceed to checkout",
+  "login": "Login",
+  "loginSuccess": "Login success",
+  "subtotal": "Subtotal",
+  "total": "Total",
+  "cancel": "Cancel"
 }
