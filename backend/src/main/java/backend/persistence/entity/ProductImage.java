@@ -1,7 +1,6 @@
 package backend.persistence.entity;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class ProductImage {
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @OneToOne(optional = false)
     @JoinColumn(name = "product_id", unique = true)
     private Product product;
 

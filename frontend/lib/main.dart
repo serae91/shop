@@ -30,11 +30,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: auth),
-        ChangeNotifierProvider(create: (_) => ThemeService()),
-        ChangeNotifierProvider(create: (_) => CartService()),
-        ChangeNotifierProvider(create: (_) => LocaleService()),
-        Provider(create: (_) => ApiService()),
+        Provider<ApiService>(
+          create: (_) => ApiService(),
+        ),
+        ChangeNotifierProvider.value(
+          value: auth,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ThemeService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartService(context.read<ApiService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => LocaleService(),
+        ),
       ],
       child: _AppRoot(router: _router),
     );

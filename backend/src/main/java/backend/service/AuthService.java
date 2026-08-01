@@ -22,7 +22,7 @@ public class AuthService {
     UserRepository userRepository;
 
     public User authenticate(final String email, final String password) {
-        final User user = userRepository.findByEmail(email);
+        final User user = userRepository.findByEmail(email).orElseThrow();
         log.info("athentitcate in service sent username " + email + "sent password" + password + "found by name password " + user.getPasswordHash());
 
         if (user == null) {

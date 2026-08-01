@@ -4,10 +4,12 @@ import backend.persistence.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.Optional;
+
 @ApplicationScoped
 public class UserRepository implements PanacheRepository<User> {
-    public User findByEmail(final String email) {
-        return find("email", email).singleResult();
+    public Optional<User> findByEmail(final String email) {
+        return find("email", email).singleResultOptional();
     }
 
     public boolean doesUsernameExist(final String username) {

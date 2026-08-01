@@ -3,8 +3,13 @@ import 'package:frontend/model/cart_item_view.dart';
 import 'package:frontend/model/cart_view.dart';
 
 import '../model/product_view.dart';
+import 'api_services.dart';
 
 class CartService extends ChangeNotifier {
+  final ApiService _api;
+
+  CartService(this._api);
+
   CartView? _cart;
 
   CartView? get cart => _cart;
@@ -30,7 +35,24 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void add(ProductView product, {int quantity = 1}) {
+  Future<void> add(ProductView product, {int quantity = 1}) async {
+    final previousCart = _cart;
+
+    _addLocally(product, quantity: quantity);
+
+    try {
+      final updatedCart = await _api.addToCart(product.id, quantity);
+      print(updatedCart);
+      _cart = updatedCart;
+      notifyListeners();
+    } catch (e) {
+      _cart = previousCart;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  void _addLocally(ProductView product, {int quantity = 1}) {
     final updatedItems = List<CartItemView>.from(items);
 
     final index = updatedItems.indexWhere(
@@ -57,7 +79,26 @@ class CartService extends ChangeNotifier {
     _updateCart(updatedItems);
   }
 
-  void decrement(ProductView product, {int quantity = 1}) {
+  Future<void> decrement(ProductView product, {int quantity = 1}) async {
+    final previousCart = _cart;
+
+    _decrementLocally(product, quantity: quantity);
+
+    try {
+      final updatedCart = await _api.updateCartItem(
+        product.id,
+        quantityFor(product.id),
+      );
+      _cart = updatedCart;
+      notifyListeners();
+    } catch (e) {
+      _cart = previousCart;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  void _decrementLocally(ProductView product, {int quantity = 1}) {
     final updatedItems = List<CartItemView>.from(items);
 
     final index = updatedItems.indexWhere(
