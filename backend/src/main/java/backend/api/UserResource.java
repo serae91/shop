@@ -1,23 +1,31 @@
 package backend.api;
 
-import backend.security.CurrentUser;
-import backend.service.UserUpdateService;
+import backend.model.UserInfo;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
+@Path("/users")
 @ApplicationScoped
-@Path("/user")
 public class UserResource {
+
     @Inject
-    CurrentUser currentUser;
+    SecurityIdentity identity;
+
     @Inject
-    UserUpdateService userUpdateService;
+    JsonWebToken jwt;
 
     @GET
-    @Path("hi")
-    public String hi() {
-        return "hi";
+    @Path("/me")
+    public UserInfo me() {
+
+        return new UserInfo(
+                jwt.getSubject(),
+                identity.getPrincipal().getName(),
+                identity.getRoles()
+        );
     }
 }

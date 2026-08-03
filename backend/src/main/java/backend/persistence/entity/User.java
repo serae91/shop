@@ -38,13 +38,16 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
     @Column(nullable = false)
     private String email;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
     private Cart cart;
+
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 }
 

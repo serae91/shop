@@ -2,6 +2,7 @@ package backend.api;
 
 import backend.persistence.view.CategoryView;
 import backend.service.CategoryService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @ApplicationScoped
 @Path("/category")
+@PermitAll
 public class CategoryResource {
     @Inject
     CategoryService categoryService;

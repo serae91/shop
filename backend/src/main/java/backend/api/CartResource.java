@@ -37,6 +37,7 @@ public class CartResource {
     @POST
     @Path("/items")
     public CartDto addItem(AddCartItemRequest request) {
+        System.out.println(request.productId() + " " + request.quantity());
         return cartService.addItem(
                 identity.getPrincipal().getName(),
                 request.productId(),
