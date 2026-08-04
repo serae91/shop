@@ -33,13 +33,16 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private String keycloakId;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private String role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false)
     private Cart cart;

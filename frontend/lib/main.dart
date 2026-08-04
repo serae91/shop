@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/services/cart_service.dart';
+import 'package:frontend/services/dio_client.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,8 @@ void main() async {
 
   final auth = AuthService();
   await auth.loadToken();
+
+  DioClient.init(auth);
 
   runApp(MyApp(auth: auth));
 }
