@@ -32,7 +32,7 @@ public class User {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "keycloak_id", nullable = false)
     private String keycloakId;
 
     @Column(nullable = false)

@@ -7,7 +7,7 @@ CREATE SEQUENCE product_images_sequence
 
 CREATE TABLE product_images
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT PRIMARY KEY DEFAULT nextval('product_images_sequence'),
     product_id BIGINT REFERENCES products (id),
     url        TEXT NOT NULL
 );

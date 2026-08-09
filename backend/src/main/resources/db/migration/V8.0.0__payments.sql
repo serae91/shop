@@ -7,7 +7,7 @@ CREATE SEQUENCE payments_sequence
 
 CREATE TABLE payments
 (
-    id             BIGINT PRIMARY KEY,
+    id             BIGINT PRIMARY KEY DEFAULT nextval('payments_sequence'),
     order_id       BIGINT REFERENCES orders (id),
     provider       VARCHAR(50),
     status         VARCHAR(30),

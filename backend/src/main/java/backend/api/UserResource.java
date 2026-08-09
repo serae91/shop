@@ -1,12 +1,14 @@
 package backend.api;
 
 import backend.model.UserInfo;
+import backend.persistence.entity.User;
+import backend.persistence.repository.UserRepository;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Path("/users")
 @ApplicationScoped
@@ -16,16 +18,23 @@ public class UserResource {
     SecurityIdentity identity;
 
     @Inject
-    JsonWebToken jwt;
+    UserRepository userRepository;
 
     @GET
     @Path("/me")
     public UserInfo me() {
 
+        final String keycloakId = identity.getPrincipal().getName();
+
+        final User user = userRepository
+                .findByKeycloakId(keycloakId)
+                .orElseThrow(NotFoundException::new);
+
         return new UserInfo(
-                jwt.getSubject(),
-                identity.getPrincipal().getName(),
-                identity.getRoles()
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
         );
     }
 }

@@ -16,4 +16,8 @@ public class UserRepository implements PanacheRepository<User> {
         final User user = find("username", username).firstResult();
         return user != null;
     }
+
+    public Optional<User> findByKeycloakId(String keycloakId) {
+        return find("keycloakId", keycloakId).firstResultOptional();
+    }
 }

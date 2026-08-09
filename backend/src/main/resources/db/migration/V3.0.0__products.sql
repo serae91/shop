@@ -7,7 +7,7 @@ CREATE SEQUENCE products_sequence
 
 CREATE TABLE products
 (
-    id          BIGINT PRIMARY KEY,
+    id          BIGINT PRIMARY KEY DEFAULT nextval('products_sequence'),
     name        VARCHAR(150)   NOT NULL,
     description TEXT,
     price       NUMERIC(10, 2) NOT NULL,

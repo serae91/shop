@@ -1,10 +1,9 @@
 package backend.model;
 
-import java.util.Set;
-
 public record UserInfo(
-        String id,
+        Long id,
         String username,
-        Set<String> roles
+        String email,
+        String role
 ) {
 }
