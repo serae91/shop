@@ -1,0 +1,45 @@
+{
+  "realm": "shop",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "shop-api",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "DEIN-API-SECRET",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false
+    },
+    {
+      "clientId": "shop-frontend",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:*/*"
+      ],
+      "webOrigins": [
+        "http://localhost:*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "testuser",
+      "enabled": true,
+      "email": "test@example.com",
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "MeinTest123!",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

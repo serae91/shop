@@ -36,7 +36,9 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.3.0
     container_name: shop-keycloak
-    command: start-dev
+    command:
+      - start-dev
+      - --import-realm
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
@@ -46,6 +48,8 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     ports:
       - "8180:8080"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
     depends_on:
       keycloak-db:
         condition: service_healthy
