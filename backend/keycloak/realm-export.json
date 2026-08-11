@@ -22,7 +22,7 @@
       "implicitFlowEnabled": false,
       "serviceAccountsEnabled": false,
       "redirectUris": [
-        "http://localhost:3000/"
+        "http://localhost:3000/callback.html"
       ],
       "webOrigins": [
         "http://localhost:3000"

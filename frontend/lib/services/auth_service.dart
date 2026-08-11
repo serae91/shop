@@ -13,7 +13,7 @@ class AuthService extends ChangeNotifier {
 
   static const String clientId = 'shop-frontend';
 
-  static const String redirectUrl = 'http://localhost:3000/';
+  static const String redirectUrl = 'http://localhost:3000/callback.html';
 
   static Future<OpenIdConfiguration> loadConfiguration() async {
     return OpenIdConnect.getConfiguration(discoveryUrl);
@@ -23,60 +23,32 @@ class AuthService extends ChangeNotifier {
     print('=== AUTH INITIALIZE ===');
 
     try {
-      final uri = Uri.base;
+      final configuration = await loadConfiguration();
 
-      print('URL: $uri');
-      print('PATH: ${uri.path}');
-      print('QUERY: ${uri.query}');
-      print(
-        'HAS CODE: ${uri.queryParameters.containsKey('code')}',
+      print('=== PROCESS STARTUP ===');
+
+      final response = await OpenIdConnect.processStartup(
+        clientId: clientId,
+        redirectUrl: redirectUrl,
+        scopes: const [
+          'openid',
+          'profile',
+          'email',
+        ],
+        configuration: configuration,
+        autoRefresh: false,
       );
-      print(
-        'HAS STATE: ${uri.queryParameters.containsKey('state')}',
-      );
 
-/*
-       * ---------------------------------------------------------
-       * 1. KEYCLOAK CALLBACK VERARBEITEN
-       * ---------------------------------------------------------
-       *
-       * Nur wenn Keycloak uns mit ?code=... zurückgeschickt hat.
-       */
-      if (uri.queryParameters.containsKey('code') &&
-          uri.queryParameters.containsKey('state')) {
-        print('=== KEYCLOAK CALLBACK DETECTED ===');
+      print('=== PROCESS STARTUP RESULT ===');
+      print('RESPONSE: $response');
 
-        final configuration = await loadConfiguration();
+      if (response != null) {
+        print('=== STARTUP LOGIN SUCCESS ===');
+        print('ACCESS TOKEN: ${response.accessToken}');
 
-        print('=== BEFORE PROCESS STARTUP ===');
+        await setToken(response.accessToken);
 
-        final response = await OpenIdConnect.processStartup(
-          clientId: clientId,
-          redirectUrl: redirectUrl,
-          scopes: const [
-            'openid',
-            'profile',
-            'email',
-          ],
-          configuration: configuration,
-          autoRefresh: false,
-        );
-
-        print('=== AFTER PROCESS STARTUP ===');
-        print('RESPONSE: $response');
-
-        if (response != null) {
-          print('=== STARTUP LOGIN SUCCESS ===');
-          print('ACCESS TOKEN: ${response.accessToken}');
-
-          await setToken(response.accessToken);
-
-          print('=== STARTUP TOKEN SAVED ===');
-        } else {
-          print('=== PROCESS STARTUP RETURNED NULL ===');
-        }
-      } else {
-        print('=== NO KEYCLOAK CALLBACK ===');
+        print('=== STARTUP TOKEN SAVED ===');
       }
     } catch (e, stackTrace) {
       print('=== PROCESS STARTUP ERROR ===');
