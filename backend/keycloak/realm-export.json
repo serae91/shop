@@ -33,7 +33,7 @@
     {
       "username": "testuser",
       "enabled": true,
-      "email": "[test@example.com](mailto:test@example.com)",
+      "email": "test@example.com",
       "emailVerified": true,
       "firstName": "Test",
       "lastName": "User",
