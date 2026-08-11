@@ -12,11 +12,18 @@ import 'services/auth_service.dart';
 import 'services/locale_service.dart';
 import 'services/theme_service.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  print('=== APP START ===');
+
   final auth = AuthService();
-  await auth.loadToken();
+
+  await auth.initialize();
+
+  print('=== AUTH AFTER INITIALIZE ===');
+  print('TOKEN: ${auth.token}');
+  print('LOGGED IN: ${auth.isLoggedIn}');
 
   DioClient.init(auth);
 
@@ -25,15 +32,19 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AuthService auth;
+
   late final GoRouter _router = AppRouter(auth).router;
 
-  MyApp({super.key, required this.auth});
+  MyApp({
+    super.key,
+    required this.auth,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<ApiService>(
+        Provider(
           create: (_) => ApiService(),
         ),
         ChangeNotifierProvider.value(
@@ -43,7 +54,7 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeService(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CartService(context.read<ApiService>()),
+          create: (context) => CartService(context.read()),
         ),
         ChangeNotifierProvider(
           create: (_) => LocaleService(),

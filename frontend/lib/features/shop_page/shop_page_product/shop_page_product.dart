@@ -130,6 +130,10 @@ class ShopPageProduct extends StatelessWidget {
 
                           if (!auth.isLoggedIn) {
                             _showLoginDialog(context);
+                            final auth = context.read<AuthService>();
+
+                            print('SHOP TOKEN: ${auth.token}');
+                            print('SHOP LOGGED IN: ${auth.isLoggedIn}');
                             return;
                           }
 
