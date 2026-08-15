@@ -19,6 +19,14 @@ class ApiService {
     return res.data;
   }
 
+  Future<CartView> getCart() async {
+    final res = await DioClient.dio.get(
+      "/cart",
+    );
+
+    return CartView.fromJson(res.data);
+  }
+
   Future<CartView> addToCart(int productId, int quantity) async {
     final res = await DioClient.dio.post(
       "/cart/items",

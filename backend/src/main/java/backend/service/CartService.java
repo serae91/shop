@@ -34,7 +34,6 @@ public class CartService {
 
         final Cart cart = cartRepository.findByUser(currentUserService.getCurrentUser())
                 .orElseGet(this::createCart);
-
         return cartMapper.toDto(cart);
     }
 

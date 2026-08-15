@@ -15,15 +15,9 @@ import 'services/theme_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  print('=== APP START ===');
-
   final auth = AuthService();
 
   await auth.initialize();
-
-  print('=== AUTH AFTER INITIALIZE ===');
-  print('TOKEN: ${auth.token}');
-  print('LOGGED IN: ${auth.isLoggedIn}');
 
   DioClient.init(auth);
 
@@ -54,7 +48,16 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeService(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CartService(context.read()),
+          create: (context) {
+            final service = CartService(
+              context.read<ApiService>(),
+              auth,
+            );
+
+            service.loadCart();
+
+            return service;
+          },
         ),
         ChangeNotifierProvider(
           create: (_) => LocaleService(),
