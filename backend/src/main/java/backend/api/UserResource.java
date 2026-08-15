@@ -10,6 +10,8 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
 
+import java.util.UUID;
+
 @Path("/users")
 @ApplicationScoped
 public class UserResource {
@@ -24,7 +26,7 @@ public class UserResource {
     @Path("/me")
     public UserInfo me() {
 
-        final String keycloakId = identity.getPrincipal().getName();
+        final UUID keycloakId = UUID.fromString(identity.getPrincipal().getName());
 
         final User user = userRepository
                 .findByKeycloakId(keycloakId)

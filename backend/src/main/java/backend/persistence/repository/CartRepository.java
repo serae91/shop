@@ -12,11 +12,11 @@ import java.util.Optional;
 @ApplicationScoped
 public class CartRepository implements PanacheRepository<Cart> {
 
-    public Optional<Cart> findByUser(User user) {
+    public Optional<Cart> findByUser(final User user) {
         return find("user", user).firstResultOptional();
     }
 
-    public Optional<CartItem> findItem(Cart cart, Product product) {
+    public Optional<CartItem> findItem(final Cart cart, final Product product) {
         return getEntityManager()
                 .createQuery("""
                         select ci

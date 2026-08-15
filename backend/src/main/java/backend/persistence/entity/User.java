@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -33,7 +34,7 @@ public class User {
     private Long id;
 
     @Column(name = "keycloak_id", nullable = false)
-    private String keycloakId;
+    private UUID keycloakId;
 
     @Column(nullable = false)
     private String username;

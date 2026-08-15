@@ -39,7 +39,6 @@ public class CartResource {
     public CartDto addItem(AddCartItemRequest request) {
         System.out.println(request.productId() + " " + request.quantity());
         return cartService.addItem(
-                identity.getPrincipal().getName(),
                 request.productId(),
                 request.quantity()
         );
@@ -52,7 +51,6 @@ public class CartResource {
             UpdateCartItemRequest request
     ) {
         return cartService.updateQuantity(
-                identity.getPrincipal().getName(),
                 productId,
                 request.quantity()
         );
