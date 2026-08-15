@@ -1,6 +1,8 @@
 {
   "realm": "shop",
   "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": false,
   "clients": [
     {
       "clientId": "shop-api",
