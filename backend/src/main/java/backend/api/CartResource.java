@@ -1,8 +1,8 @@
 package backend.api;
 
 import backend.model.AddCartItemRequest;
-import backend.model.CartDto;
 import backend.model.UpdateCartItemRequest;
+import backend.persistence.view.CartView;
 import backend.service.CartService;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -30,13 +30,13 @@ public class CartResource {
     SecurityIdentity identity;
 
     @GET
-    public CartDto getCart() {
+    public CartView getCart() {
         return cartService.getCart();
     }
 
     @POST
     @Path("/items")
-    public CartDto addItem(AddCartItemRequest request) {
+    public CartView addItem(AddCartItemRequest request) {
         System.out.println(request.productId() + " " + request.quantity());
         return cartService.addItem(
                 request.productId(),
@@ -46,7 +46,7 @@ public class CartResource {
 
     @PUT
     @Path("/items/{productId}")
-    public CartDto updateItem(
+    public CartView updateItem(
             @PathParam("productId") Long productId,
             UpdateCartItemRequest request
     ) {
@@ -58,7 +58,7 @@ public class CartResource {
 
     @DELETE
     @Path("/items/{productId}")
-    public CartDto removeItem(@PathParam("productId") Long productId) {
+    public CartView removeItem(@PathParam("productId") Long productId) {
         return cartService.removeItem(
                 identity.getPrincipal().getName(),
                 productId
