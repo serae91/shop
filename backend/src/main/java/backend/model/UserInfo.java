@@ -4,6 +4,6 @@ public record UserInfo(
         Long id,
         String username,
         String email,
-        String role
+        UserRole role
 ) {
 }
