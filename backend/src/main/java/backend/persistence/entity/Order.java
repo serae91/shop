@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -45,7 +46,12 @@ public class Order {
     @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Column(
+            name = "created_at",
+            nullable = false,
+            updatable = false
+    )
     private Instant createdAt;
 
     public enum OrderStatus {

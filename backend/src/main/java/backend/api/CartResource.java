@@ -31,7 +31,7 @@ public class CartResource {
 
     @GET
     public CartDto getCart() {
-        return cartService.getCart(identity.getPrincipal().getName());
+        return cartService.getCart();
     }
 
     @POST

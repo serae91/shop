@@ -30,9 +30,7 @@ public class CartService {
     @Inject
     CartMapper cartMapper;
 
-    public CartDto getCart(String email) {
-
-        currentUserService.printClaims();
+    public CartDto getCart() {
 
         final Cart cart = cartRepository.findByUser(currentUserService.getCurrentUser())
                 .orElseGet(this::createCart);
@@ -42,7 +40,6 @@ public class CartService {
 
     @Transactional
     public CartDto addItem(final Long productId, final int quantity) {
-        System.out.println("add item");
 
         final Product product = productRepository.findByIdOptional(productId)
                 .orElseThrow();
