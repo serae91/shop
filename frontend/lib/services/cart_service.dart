@@ -4,11 +4,13 @@ import 'package:frontend/model/cart_view.dart';
 
 import '../model/product_view.dart';
 import 'api_services.dart';
+import 'auth_service.dart';
 
 class CartService extends ChangeNotifier {
   final ApiService _api;
+  final AuthService _auth;
 
-  CartService(this._api);
+  CartService(this._api, this._auth);
 
   CartView? _cart;
 
@@ -129,5 +131,22 @@ class CartService extends ChangeNotifier {
       cartItems: updatedItems,
     );
     notifyListeners();
+  }
+
+  Future<void> loadCart() async {
+    if (!_auth.isLoggedIn) {
+      return;
+    }
+
+    try {
+      final cart = await _api.getCart();
+      print(cart);
+
+      _cart = cart;
+
+      notifyListeners();
+    } catch (e) {
+      print('Fehler beim Laden des Carts: $e');
+    }
   }
 }

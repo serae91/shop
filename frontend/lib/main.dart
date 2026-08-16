@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:frontend/services/cart_service.dart';
+import 'package:frontend/services/dio_client.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -11,26 +12,33 @@ import 'services/auth_service.dart';
 import 'services/locale_service.dart';
 import 'services/theme_service.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final auth = AuthService();
-  await auth.loadToken();
+
+  await auth.initialize();
+
+  DioClient.init(auth);
 
   runApp(MyApp(auth: auth));
 }
 
 class MyApp extends StatelessWidget {
   final AuthService auth;
+
   late final GoRouter _router = AppRouter(auth).router;
 
-  MyApp({super.key, required this.auth});
+  MyApp({
+    super.key,
+    required this.auth,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<ApiService>(
+        Provider(
           create: (_) => ApiService(),
         ),
         ChangeNotifierProvider.value(
@@ -40,7 +48,16 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeService(),
         ),
         ChangeNotifierProvider(
-          create: (context) => CartService(context.read<ApiService>()),
+          create: (context) {
+            final service = CartService(
+              context.read<ApiService>(),
+              auth,
+            );
+
+            service.loadCart();
+
+            return service;
+          },
         ),
         ChangeNotifierProvider(
           create: (_) => LocaleService(),

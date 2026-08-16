@@ -32,8 +32,8 @@ public class CartMapper {
 
         return new CartItemDto(
                 item.getId(),
-                item.getQuantity(),
-                productMapper.toDto(item.getProduct())
+                productMapper.toDto(item.getProduct()),
+                item.getQuantity()
         );
     }
 }

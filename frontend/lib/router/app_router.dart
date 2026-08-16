@@ -17,21 +17,28 @@ class AppRouter {
     initialLocation: AppRoutes.shop.path,
     refreshListenable: auth,
     redirect: (context, state) {
-      final route = AppRoutes.findByPath(state.matchedLocation);
       final isLoggedIn = auth.isLoggedIn;
+      final isLoginRoute = state.matchedLocation == AppRoutes.login.path;
 
-      if (route == null) return null;
+      final route = AppRoutes.findByPath(state.matchedLocation);
+
+      if (route == null) {
+        return null;
+      }
 
       if (route.requiresAuth && !isLoggedIn) {
         final redirect = Uri.encodeComponent(state.uri.toString());
+
         return '${AppRoutes.login.path}?redirect=$redirect';
       }
 
-      if (isLoggedIn && route.path == AppRoutes.login.path) {
+      if (isLoggedIn && isLoginRoute) {
         final target = state.uri.queryParameters['redirect'];
+
         if (target != null && target.isNotEmpty) {
           return Uri.decodeComponent(target);
         }
+
         return AppRoutes.shop.path;
       }
 

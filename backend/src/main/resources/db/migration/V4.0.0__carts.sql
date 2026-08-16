@@ -7,7 +7,7 @@ CREATE SEQUENCE carts_sequence
 
 CREATE TABLE carts
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT PRIMARY KEY DEFAULT nextval('carts_sequence'),
     user_id    BIGINT UNIQUE REFERENCES users (id),
     created_at TIMESTAMP with time zone not null DEFAULT NOW()
 );

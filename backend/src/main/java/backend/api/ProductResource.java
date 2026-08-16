@@ -2,6 +2,7 @@ package backend.api;
 
 import backend.persistence.view.ProductView;
 import backend.service.ProductService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @ApplicationScoped
 @Path("/product")
+@PermitAll
 public class ProductResource {
     @Inject
     ProductService productService;

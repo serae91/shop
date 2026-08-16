@@ -7,7 +7,7 @@ CREATE SEQUENCE order_items_sequence
 
 CREATE TABLE order_items
 (
-    id            BIGINT PRIMARY KEY,
+    id            BIGINT PRIMARY KEY DEFAULT nextval('order_items_sequence'),
     order_id      BIGINT REFERENCES orders (id) ON DELETE CASCADE,
     product_id    BIGINT REFERENCES products (id),
     quantity      INT            NOT NULL,

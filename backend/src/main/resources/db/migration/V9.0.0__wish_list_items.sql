@@ -7,7 +7,7 @@ CREATE SEQUENCE wish_list_items_sequence
 
 CREATE TABLE wish_list_items
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT PRIMARY KEY DEFAULT nextval('wish_list_items_sequence'),
     user_id    BIGINT REFERENCES users (id),
     product_id BIGINT REFERENCES products (id)
 );

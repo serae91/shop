@@ -14,8 +14,10 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -24,19 +26,32 @@ import java.util.List;
 @Entity
 @Table(name = "carts")
 @RegisterForReflection
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Cart {
+
     @Id
-    @GeneratedValue(generator = "carts_sequence", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "carts_sequence", sequenceName = "carts_sequence", allocationSize = 1)
+    @GeneratedValue(
+            generator = "carts_sequence",
+            strategy = GenerationType.SEQUENCE
+    )
+    @SequenceGenerator(
+            name = "carts_sequence",
+            sequenceName = "carts_sequence",
+            allocationSize = 1
+    )
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id", unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            unique = true
+    )
     private User user;
 
     @OneToMany(
@@ -44,8 +59,14 @@ public class Cart {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @Builder.Default
     private List<CartItem> cartItems = new ArrayList<>();
 
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Column(
+            name = "created_at",
+            nullable = false,
+            updatable = false
+    )
     private Instant createdAt;
 }

@@ -1,23 +1,42 @@
 package backend.api;
 
-import backend.security.CurrentUser;
-import backend.service.UserUpdateService;
+import backend.model.UserInfo;
+import backend.persistence.entity.User;
+import backend.persistence.repository.UserRepository;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;
 
+import java.util.UUID;
+
+@Path("/users")
 @ApplicationScoped
-@Path("/user")
 public class UserResource {
+
     @Inject
-    CurrentUser currentUser;
+    SecurityIdentity identity;
+
     @Inject
-    UserUpdateService userUpdateService;
+    UserRepository userRepository;
 
     @GET
-    @Path("hi")
-    public String hi() {
-        return "hi";
+    @Path("/me")
+    public UserInfo me() {
+
+        final UUID keycloakId = UUID.fromString(identity.getPrincipal().getName());
+
+        final User user = userRepository
+                .findByKeycloakId(keycloakId)
+                .orElseThrow(NotFoundException::new);
+
+        return new UserInfo(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }

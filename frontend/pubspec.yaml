@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.2.3
   provider: ^6.1.5+1
   go_router: ^13.2.0
+  openidconnect: ^2.0.1
 
 dev_dependencies:
   flutter_test:

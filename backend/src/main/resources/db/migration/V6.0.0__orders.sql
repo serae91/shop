@@ -7,7 +7,7 @@ CREATE SEQUENCE orders_sequence
 
 CREATE TABLE orders
 (
-    id          BIGINT PRIMARY KEY,
+    id          BIGINT PRIMARY KEY DEFAULT nextval('orders_sequence'),
     user_id     BIGINT REFERENCES users (id),
     status      VARCHAR(30) DEFAULT 'PENDING',
     total_price NUMERIC(10, 2),

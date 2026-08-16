@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:frontend/model/product_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -130,6 +130,10 @@ class ShopPageProduct extends StatelessWidget {
 
                           if (!auth.isLoggedIn) {
                             _showLoginDialog(context);
+                            final auth = context.read<AuthService>();
+
+                            print('SHOP TOKEN: ${auth.token}');
+                            print('SHOP LOGGED IN: ${auth.isLoggedIn}');
                             return;
                           }
 

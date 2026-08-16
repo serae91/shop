@@ -7,6 +7,6 @@ CREATE SEQUENCE categories_sequence
 
 CREATE TABLE categories
 (
-    id   BIGINT PRIMARY KEY,
+    id   BIGINT PRIMARY KEY DEFAULT nextval('categories_sequence'),
     name VARCHAR(100) NOT NULL UNIQUE
 );
