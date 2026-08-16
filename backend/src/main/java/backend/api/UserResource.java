@@ -1,5 +1,6 @@
 package backend.api;
 
+import backend.interceptor.ShopOnly;
 import backend.model.UserInfo;
 import backend.persistence.entity.User;
 import backend.persistence.repository.UserRepository;
@@ -22,6 +23,7 @@ public class UserResource {
     @Inject
     UserRepository userRepository;
 
+    @ShopOnly
     @GET
     @Path("/me")
     public UserInfo me() {

@@ -1,5 +1,6 @@
 package backend.api;
 
+import backend.interceptor.ShopOnly;
 import backend.model.AddCartItemRequest;
 import backend.model.UpdateCartItemRequest;
 import backend.persistence.view.CartView;
@@ -20,6 +21,7 @@ import jakarta.ws.rs.core.MediaType;
 @Path("/cart")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@ShopOnly
 @Authenticated
 public class CartResource {
 
