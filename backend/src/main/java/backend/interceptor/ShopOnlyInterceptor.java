@@ -1,6 +1,6 @@
 package backend.interceptor;
 
-import backend.config.ShopModeService;
+import backend.config.ConfigService;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
@@ -14,11 +14,11 @@ import jakarta.ws.rs.ForbiddenException;
 public class ShopOnlyInterceptor {
 
     @Inject
-    ShopModeService shopModeService;
+    ConfigService configService;
 
     @AroundInvoke
     Object checkShopMode(InvocationContext context) throws Exception {
-        if (!shopModeService.isShop()) {
+        if (!configService.isShop()) {
             throw new ForbiddenException("Shop is currently disabled");
         }
 

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../router/app_routes.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/cart_service.dart';
+import '../../../services/config_service.dart';
 
 class ShopPageProduct extends StatelessWidget {
   final ProductView product;
@@ -43,6 +44,8 @@ class ShopPageProduct extends StatelessWidget {
     final cart = context.watch<CartService>();
     final quantity = cart.quantityFor(product.id);
     final color = Theme.of(context).colorScheme;
+    final config = context.watch<ConfigService>();
+
     return Container(
       decoration: BoxDecoration(
         color: color.surface,
@@ -102,45 +105,44 @@ class ShopPageProduct extends StatelessWidget {
                         color: color.primary,
                       ),
                     ),
-                    Text('${l10n.inCart}: ${quantity}'),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: color.secondary,
-                        borderRadius: BorderRadius.circular(8),
+                    if (config.isShop) ...[
+                      Text('${l10n.inCart}: ${quantity}'),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: color.secondary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.remove, size: 18),
+                          color: color.onPrimary,
+                          onPressed: quantity > 0
+                              ? () =>
+                                  context.read<CartService>().decrement(product)
+                              : null,
+                        ),
                       ),
-                      child: IconButton(
-                        icon: const Icon(Icons.remove, size: 18),
-                        color: color.onPrimary,
-                        onPressed: quantity > 0
-                            ? () =>
-                                context.read<CartService>().decrement(product)
-                            : null,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: color.primary,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.add, size: 18),
-                        color: color.onPrimary,
-                        onPressed: () {
-                          final auth = context.read<AuthService>();
-
-                          if (!auth.isLoggedIn) {
-                            _showLoginDialog(context);
+                      Container(
+                        decoration: BoxDecoration(
+                          color: color.primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.add, size: 18),
+                          color: color.onPrimary,
+                          onPressed: () {
                             final auth = context.read<AuthService>();
 
-                            print('SHOP TOKEN: ${auth.token}');
-                            print('SHOP LOGGED IN: ${auth.isLoggedIn}');
-                            return;
-                          }
+                            if (!auth.isLoggedIn) {
+                              _showLoginDialog(context);
 
-                          context.read<CartService>().add(product);
-                        },
-                      ),
-                    ),
+                              return;
+                            }
+
+                            context.read<CartService>().add(product);
+                          },
+                        ),
+                      )
+                    ]
                   ],
                 ),
               ],

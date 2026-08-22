@@ -7,8 +7,6 @@ class ProductService {
   Future<List<ProductView>> getProducts() async {
     final res = await DioClient.dio.get("$_endpoint/products");
 
-    return (res.data as List)
-        .map((e) => ProductView.fromJson(e))
-        .toList();
+    return (res.data as List).map((e) => ProductView.fromJson(e)).toList();
   }
 }

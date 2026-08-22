@@ -1,4 +1,4 @@
-package backend.api;
+package backend.api.shoponly;
 
 import backend.interceptor.ShopOnly;
 import backend.model.AddCartItemRequest;
@@ -7,6 +7,7 @@ import backend.persistence.view.CartView;
 import backend.service.CartService;
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -18,11 +19,12 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/cart")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 @ShopOnly
 @Authenticated
+@ApplicationScoped
+@Path("/cart")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class CartResource {
 
     @Inject

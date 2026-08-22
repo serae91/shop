@@ -1,7 +1,6 @@
 package backend.api;
 
-import backend.persistence.view.ProductView;
-import backend.service.ProductService;
+import backend.config.ConfigService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -11,20 +10,18 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import java.util.List;
-
 @PermitAll
 @ApplicationScoped
-@Path("/product")
+@Path("/config")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class ProductResource {
+public class ConfigResource {
     @Inject
-    ProductService productService;
+    ConfigService configService;
 
     @GET
-    @Path("/products")
-    public List<ProductView> getProducts() {
-        return productService.getProducts();
+    @Path("/shopmode")
+    public boolean isShop() {
+        return configService.isShop();
     }
 }

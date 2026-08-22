@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/l10n/app_localizations.dart';
 import 'package:frontend/services/cart_service.dart';
+import 'package:frontend/services/config_service.dart';
 import 'package:frontend/services/dio_client.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,15 @@ class MyApp extends StatelessWidget {
             );
 
             service.loadCart();
+
+            return service;
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            final service = ConfigService();
+
+            service.loadShopMode();
 
             return service;
           },

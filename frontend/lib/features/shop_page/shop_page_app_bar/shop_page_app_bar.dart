@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../router/app_routes.dart';
 import '../../../services/cart_service.dart';
+import '../../../services/config_service.dart';
 import '../../../services/theme_service.dart';
 
 class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -18,6 +19,7 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
     final l10n = AppLocalizations.of(context)!;
     final color = Theme.of(context).colorScheme;
     final cart = context.watch<CartService>();
+    final config = context.watch<ConfigService>();
 
     return AppBar(
       iconTheme: IconThemeData(
@@ -33,15 +35,16 @@ class ShopPageAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
       ),
       actions: [
-        IconButton(
-          tooltip: l10n.cartTitle,
-          onPressed: () => context.go(AppRoutes.cart.path),
-          icon: Badge(
-            isLabelVisible: cart.totalQuantity > 0,
-            label: Text('${cart.totalQuantity}'),
-            child: const Icon(Icons.shopping_cart_outlined),
+        if (config.isShop)
+          IconButton(
+            tooltip: l10n.cartTitle,
+            onPressed: () => context.go(AppRoutes.cart.path),
+            icon: Badge(
+              isLabelVisible: cart.totalQuantity > 0,
+              label: Text('${cart.totalQuantity}'),
+              child: const Icon(Icons.shopping_cart_outlined),
+            ),
           ),
-        ),
         const SizedBox(width: 8),
         IconButton(
           tooltip: l10n.toggleTheme,
