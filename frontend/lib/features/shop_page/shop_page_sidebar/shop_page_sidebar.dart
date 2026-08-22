@@ -24,8 +24,7 @@ class ShopPageSidebar extends StatelessWidget {
       ...categories,
     ];
 
-    return Container(
-      width: 260,
+    return Material(
       color: color.surface,
       child: SafeArea(
         child: Column(
@@ -58,8 +57,9 @@ class ShopPageSidebar extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      tileColor:
-                          selected ? color.primary.withOpacity(0.1) : null,
+                      tileColor: selected
+                          ? color.primary.withValues(alpha: 0.1)
+                          : null,
                       leading: Icon(
                         Icons.category,
                         color:

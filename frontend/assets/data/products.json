@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "YuYou",
+    "description": "HenHao",
+    "price": 100.10,
+    "stock": 10,
+    "category": {
+      "id": 1,
+      "name": "cat1"
+    },
+    "createdAt": "2026-08-22T00:00:00.000Z",
+    "productImage": {
+      "id": 1,
+      "url": "https://picsum.photos/id/1011/600/600"
+    }
+  }
+]

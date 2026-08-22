@@ -37,7 +37,7 @@ class _ShopPageState extends State<ShopPage> {
     final color = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: color.background,
+      backgroundColor: color.surface,
       appBar: const ShopPageAppBar(),
       body: Row(
         children: [
@@ -46,17 +46,30 @@ class _ShopPageState extends State<ShopPage> {
             child: FutureBuilder<List<CategoryView>>(
               future: _categoriesFuture,
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
+                if (snapshot.connectionState != ConnectionState.done) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
+                if (snapshot.hasError) {
+                  print('CATEGORY ERROR: ${snapshot.error}');
+                  print('CATEGORY STACKTRACE: ${snapshot.stackTrace}');
+
+                  return Center(
+                    child: Text(
+                      'Fehler beim Laden der Kategorien:\n${snapshot.error}',
+                    ),
+                  );
+                }
+
+                final categories = snapshot.data ?? [];
+
                 return Material(
                   color: color.surface,
                   elevation: 1,
                   child: ShopPageSidebar(
-                    categories: snapshot.data!,
+                    categories: categories,
                     selectedCategoryId: selectedCategoryId,
                     onSelect: (id) {
                       setState(() => selectedCategoryId = id);
@@ -82,8 +95,14 @@ class _ShopPageState extends State<ShopPage> {
                 }
 
                 if (snapshot.hasError) {
-                  return const Center(
-                    child: Text('Fehler beim Laden'),
+                  print('=== PRODUCT FUTURE ERROR ===');
+                  print('ERROR: ${snapshot.error}');
+                  print('STACKTRACE: ${snapshot.stackTrace}');
+
+                  return Center(
+                    child: Text(
+                      'Fehler beim Laden:\n${snapshot.error}',
+                    ),
                   );
                 }
 
