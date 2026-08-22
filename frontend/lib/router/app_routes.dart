@@ -6,21 +6,17 @@ class AppRoutes {
     name: 'shop',
   );
 
-  static const login = AppRouteConfig(
-    path: '/login',
-    name: 'login',
-  );
+  static const login =
+      AppRouteConfig(path: '/login', name: 'login', requiresShop: true);
 
   static const cart = AppRouteConfig(
-    path: '/cart',
-    name: 'cart',
-    requiresAuth: true,
-  );
+      path: '/cart', name: 'cart', requiresAuth: true, requiresShop: true);
 
   static const checkout = AppRouteConfig(
     path: '/checkout',
     name: 'checkout',
     requiresAuth: true,
+    requiresShop: true,
   );
 
   static const all = [

@@ -17,22 +17,29 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final auth = AuthService();
+  final config = ConfigService();
 
   await auth.initialize();
+  await config.loadShopMode();
 
   DioClient.init(auth);
 
-  runApp(MyApp(auth: auth));
+  runApp(MyApp(
+    auth: auth,
+    config: config,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final AuthService auth;
+  final ConfigService config;
 
-  late final GoRouter _router = AppRouter(auth).router;
+  late final GoRouter _router = AppRouter(auth, config).router;
 
   MyApp({
     super.key,
     required this.auth,
+    required this.config,
   });
 
   @override
@@ -60,14 +67,8 @@ class MyApp extends StatelessWidget {
             return service;
           },
         ),
-        ChangeNotifierProvider(
-          create: (context) {
-            final service = ConfigService();
-
-            service.loadShopMode();
-
-            return service;
-          },
+        ChangeNotifierProvider.value(
+          value: config,
         ),
         ChangeNotifierProvider(
           create: (_) => LocaleService(),

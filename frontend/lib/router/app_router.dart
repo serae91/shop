@@ -6,12 +6,14 @@ import '../features/cart_page/cart_page.dart';
 import '../features/checkout_page/checkout_page.dart';
 import '../features/shop_page/shop_page.dart';
 import '../services/auth_service.dart';
+import '../services/config_service.dart';
 import 'app_routes.dart';
 
 class AppRouter {
   final AuthService auth;
+  final ConfigService config;
 
-  AppRouter(this.auth);
+  AppRouter(this.auth, this.config);
 
   late final GoRouter router = GoRouter(
     initialLocation: AppRoutes.shop.path,
@@ -24,6 +26,12 @@ class AppRouter {
 
       if (route == null) {
         return null;
+      }
+
+      if (route.requiresShop && !config.isShop) {
+        final redirect = Uri.encodeComponent(state.uri.toString());
+
+        return '${AppRoutes.shop.path}?redirect=$redirect';
       }
 
       if (route.requiresAuth && !isLoggedIn) {
